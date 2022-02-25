@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\Grid.cs" />
      <Compile Include="Assets\Scripts\Node.cs" />
      <Compile Include="Assets\Scripts\Pathfinding.cs" />
+     <Compile Include="Assets\Scripts\Reducewaypoints.cs" />
  <Reference Include="UnityEngine">
  <HintPath>/home/aleena/unity18/2019.4.32f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

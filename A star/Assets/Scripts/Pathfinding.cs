@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Threading;
+using System.ComponentModel;
+using System.Net;
+using System.IO;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,10 +10,15 @@ public class Pathfinding : MonoBehaviour
 {
 
     public Transform seeker, target;
-    Grid grid;
 
+    public float epsilon = 0.2f; //for RDP tolerance
+    Grid grid;
+    Reducewaypoints rw = new Reducewaypoints();
     int noofwaypoints;
     public LineRenderer pathLineRenderer = new LineRenderer();
+    public LineRenderer finalpathLineRenderer = new LineRenderer();
+    public List<Vector3> waypoints;
+    public List<Vector3> reducedwaypoints;
 
     public Vector3[] points;
 
@@ -30,27 +38,35 @@ public class Pathfinding : MonoBehaviour
         FindPath(seeker.position, target.position);
     }
 
-    async void GizmosBypass(List<Node> path)
+    void GizmosBypass(List<Node> path)
     {
         // if (!Input.GetKeyDown(KeyCode.A)) return;
 
         int i = 0;
         int noofwaypoints = path.Count;
         points = new Vector3[path.Count];
-        pathLineRenderer.positionCount = points.Length;
-        points[path.Count - 1] = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
+        waypoints = new List<Vector3>();
 
+        points[path.Count - 1] = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
+        pathLineRenderer.positionCount = noofwaypoints;
         foreach (Node n in path)
         {
             points[i] = grid.worldBottomLeft + Vector3.right * (n.gridX * grid.nodeDiameter + grid.nodeRadius) + Vector3.forward * (n.gridY * grid.nodeDiameter + grid.nodeRadius);
             // points[i] = new Vector3(n.gridX + grid.worldBottomLeft.x, 0, n.gridY + grid.worldBottomLeft.y);
+            waypoints.Add(points[i]);
             pathLineRenderer.SetPosition(i, points[i]);
             i++;
+
             //add grid location(+bottom_left_x_world and bottom_left_y_world) of n to points
 
 
         }
-
+        reducedwaypoints = rw.DouglasPeuckerReduction(waypoints, epsilon);
+        finalpathLineRenderer.positionCount = reducedwaypoints.Count;
+        for (int j = 0; j < reducedwaypoints.Count; j++)
+        {
+            finalpathLineRenderer.SetPosition(j, reducedwaypoints[j]);
+        }
 
 
 
