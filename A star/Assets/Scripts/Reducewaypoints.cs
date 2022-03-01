@@ -13,7 +13,7 @@ using System;
 /// <param name="Tolerance">The tolerance.</param>
 /// <returns></returns>
 
-public class Reducewaypoints : MonoBehaviour
+public class Reducewaypoints
 {
     Grid g;
     public float nodeRadius;

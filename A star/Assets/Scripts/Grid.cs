@@ -14,7 +14,7 @@ public class Grid : MonoBehaviour
     public Transform seeker;
 
     public float nodeDiameter;
-    int gridSizeX, gridSizeY;
+    public int gridSizeX, gridSizeY;
 
     //LineRenderer pathLineRenderer;
 
@@ -31,6 +31,7 @@ public class Grid : MonoBehaviour
     {
         grid = new Node[gridSizeX, gridSizeY];
         worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
+
 
         for (int x = 0; x < gridSizeX; x++)
         {

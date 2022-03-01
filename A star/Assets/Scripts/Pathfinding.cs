@@ -11,14 +11,16 @@ public class Pathfinding : MonoBehaviour
 
     public Transform seeker, target;
 
-    public float epsilon = 0.2f; //for RDP tolerance
+    public float epsilon = 1000f; //for RDP tolerance
     Grid grid;
+    GrahamScan gs;
     Reducewaypoints rw = new Reducewaypoints();
     int noofwaypoints;
     public LineRenderer pathLineRenderer = new LineRenderer();
     public LineRenderer finalpathLineRenderer = new LineRenderer();
     public List<Vector3> waypoints;
     public List<Vector3> reducedwaypoints;
+    public List<Vector3> obstaclevertex;
 
     public Vector3[] points;
 
@@ -28,14 +30,29 @@ public class Pathfinding : MonoBehaviour
         //pathLineRenderer = new LineRenderer();
     }
 
-    void Start()
-    {
-        FindPath(seeker.position, target.position);
-    }
+    // void Start()
+    // {
+    //     // ObstacleCoordinates();
+    //     FindPath(seeker.position, target.position);
+
+    // }
 
     void Update()
     {
-        FindPath(seeker.position, target.position);
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            FindPath(seeker.position, target.position);
+        }
+    }
+
+    void ObstacleCoordinates()
+    {
+
+        obstaclevertex.Add(new Vector3(12.5f, 0f, 60f));
+        obstaclevertex.Add(new Vector3(40.6f, 0f, 90f));
+        obstaclevertex.Add(new Vector3(250f, 0f, 300f));
+        obstaclevertex.Add(new Vector3(110f, 0, 200f));
+        gs.convexHull(obstaclevertex);
     }
 
     void GizmosBypass(List<Node> path)
@@ -98,7 +115,9 @@ public class Pathfinding : MonoBehaviour
 
             if (node == targetNode)
             {
+                Debug.Log(startNode.worldPosition + " " + targetNode.worldPosition);
                 RetracePath(startNode, targetNode);
+
                 return;
             }
 
