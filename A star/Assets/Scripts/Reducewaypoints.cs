@@ -25,9 +25,6 @@ public class Reducewaypoints
         unwalkableMask = g.unwalkableMask;
     }
 
-
-
-
     public List<Vector3> DouglasPeuckerReduction
         (List<Vector3> Points, double Tolerance)
     {
@@ -65,26 +62,30 @@ public class Reducewaypoints
     {
         // nodeRadius = g.nodeRadius;
         // unwalkableMask = g.unwalkableMask;
+        int k = 0;
         float slope = (Math.Abs(firstpoint.z - secondpoint.z)) / (Math.Abs(firstpoint.x - secondpoint.x));
-        float dist = 0.1f;
+        float dist = 100f;
         float xend = (float)(secondpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
         float zend = (float)(secondpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-        float xnew = (float)(firstpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-        float znew = (float)(firstpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-        float ynew = 0.0f;
-        Vector3 newpoint = new Vector3(xnew, ynew, znew);
-        bool notcollision = !(Physics.CheckSphere(newpoint, nodeRadius, unwalkableMask));
-        if (notcollision == false)
+        float xnew = float.MinValue;
+        float znew = float.MinValue;
+        while ((xnew <= xend) && (znew <= zend))
         {
-            return false;
+            xnew = (float)(firstpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
+            znew = (float)(firstpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
+            float ynew = 0.0f;
+            Vector3 newpoint = new Vector3(xnew, ynew, znew);
+            bool notcollision = !(Physics.CheckSphere(newpoint, nodeRadius, unwalkableMask));
+            if (notcollision == false)
+            {
+                return false;
+                k = 1;
 
+            }
+            firstpoint = newpoint;
         }
-        else
-        {
-            if (!(xnew >= xend) && (znew) >= (zend))
-                CheckLinewalkable(newpoint, secondpoint);
-            return true;
-        }
+        return true;
+
     }
 
     /// <summary>

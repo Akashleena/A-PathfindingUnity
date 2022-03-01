@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Security.Cryptography;
+using System.Threading;
 using System.ComponentModel;
 using System.Net;
 using System.IO;
@@ -11,10 +12,11 @@ public class Pathfinding : MonoBehaviour
 
     public Transform seeker, target;
 
-    public float epsilon = 1000f; //for RDP tolerance
+    public float epsilon = 110f; //for RDP tolerance
     Grid grid;
     GrahamScan gs;
     Reducewaypoints rw = new Reducewaypoints();
+    //  MyScript script = obj.AddComponent<MyScript>();
     int noofwaypoints;
     public LineRenderer pathLineRenderer = new LineRenderer();
     public LineRenderer finalpathLineRenderer = new LineRenderer();
@@ -39,6 +41,13 @@ public class Pathfinding : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+
+            pathLineRenderer.positionCount = 0;
+        }
+
+
         if (Input.GetKeyDown(KeyCode.C))
         {
             FindPath(seeker.position, target.position);

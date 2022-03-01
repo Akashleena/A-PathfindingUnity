@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-public class GrahamScan : MonoBehaviour
+public class GrahamScan
 {
     const int TURN_LEFT = 1;
     const int TURN_RIGHT = -1;
