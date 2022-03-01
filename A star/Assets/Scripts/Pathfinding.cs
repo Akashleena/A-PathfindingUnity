@@ -45,6 +45,7 @@ public class Pathfinding : MonoBehaviour
         {
 
             pathLineRenderer.positionCount = 0;
+            finalpathLineRenderer.positionCount = 0;
         }
 
 
