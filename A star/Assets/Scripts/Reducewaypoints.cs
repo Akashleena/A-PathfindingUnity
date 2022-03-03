@@ -62,7 +62,7 @@ public class Reducewaypoints
     {
         // nodeRadius = g.nodeRadius;
         // unwalkableMask = g.unwalkableMask;
-        int k = 0;
+        //int k = 0;
         float slope = (Math.Abs(firstpoint.z - secondpoint.z)) / (Math.Abs(firstpoint.x - secondpoint.x));
         float dist = 100f;
         float xend = (float)(secondpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
@@ -79,7 +79,7 @@ public class Reducewaypoints
             if (notcollision == false)
             {
                 return false;
-                k = 1;
+                // k = 1;
 
             }
             firstpoint = newpoint;

@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Threading;
+﻿
 using System.ComponentModel;
 using System.Net;
 using System.IO;
@@ -14,7 +13,7 @@ public class Pathfinding : MonoBehaviour
 
     public float epsilon = 110f; //for RDP tolerance
     Grid grid;
-    GrahamScan gs;
+    //GrahamScan gs;
     Reducewaypoints rw = new Reducewaypoints();
     //  MyScript script = obj.AddComponent<MyScript>();
     int noofwaypoints;
@@ -32,12 +31,13 @@ public class Pathfinding : MonoBehaviour
         //pathLineRenderer = new LineRenderer();
     }
 
-    // void Start()
-    // {
-    //     // ObstacleCoordinates();
-    //     FindPath(seeker.position, target.position);
+    void Start()
+    {
+        //ObstacleCoordinates();
+        // GrahamScan();
 
-    // }
+
+    }
 
     void Update()
     {
@@ -55,15 +55,14 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-    void ObstacleCoordinates()
-    {
 
-        obstaclevertex.Add(new Vector3(12.5f, 0f, 60f));
-        obstaclevertex.Add(new Vector3(40.6f, 0f, 90f));
-        obstaclevertex.Add(new Vector3(250f, 0f, 300f));
-        obstaclevertex.Add(new Vector3(110f, 0, 200f));
-        gs.convexHull(obstaclevertex);
-    }
+
+    // void GrahamScan()
+    // {
+    //     gs = new GrahamScan();
+    //     gs.convexHull(obstaclevertex);
+    // }
+
 
     void GizmosBypass(List<Node> path)
     {
@@ -125,7 +124,7 @@ public class Pathfinding : MonoBehaviour
 
             if (node == targetNode)
             {
-                Debug.Log(startNode.worldPosition + " " + targetNode.worldPosition);
+                // Debug.Log(startNode.worldPosition + " " + targetNode.worldPosition);
                 RetracePath(startNode, targetNode);
 
                 return;
