@@ -1,6 +1,6 @@
 // A C# program to check if a given point
 // lies inside a given polygon
-// Refer https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+//https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/
 // for explanation of functions onSegment(),
 // orientation() and doIntersect()
 using System;
@@ -17,6 +17,7 @@ public class CheckifinsideObstacle
     // Define Infinite (Using INT_MAX
     // caused overflow problems)
     static int INF = 10000;
+    Vector3 extreme;
 
 
     // Given three collinear points p, q, r,
@@ -26,8 +27,8 @@ public class CheckifinsideObstacle
     {
         if (q.x <= Math.Max(p.x, r.x) &&
             q.x >= Math.Min(p.x, r.x) &&
-            q.y <= Math.Max(p.y, r.y) &&
-            q.y >= Math.Min(p.y, r.y))
+            q.z <= Math.Max(p.z, r.z) &&
+            q.z >= Math.Min(p.z, r.z))
         {
             return true;
         }
@@ -112,9 +113,21 @@ public class CheckifinsideObstacle
             return false;
         }
 
-        // Create a Vector3 for line segment from p to infinite
-        Vector3 extreme = new Vector3(INF, p.y);
 
+        // Create a Vector3 for line segment from p to infinite
+        // if (q == true)
+        // {
+        Vector3 extreme = new Vector3(INF, p.z);
+        // extreme = new Vector3(INF, 0, 0) - new Vector3(p.z, 0, 0);
+        Debug.Log("extreme" + extreme);
+        // }
+        // Create a Vector3 for line segment from infinite to p 
+        // else
+        // {
+        // Vector3 extreme = new Vector3(-INF, p.z);
+        // // extreme = new Vector3(-INF, 0, 0) - new Vector3(p.z, 0, 0);
+        // Debug.Log("extreme" + extreme);
+        // }
         // Count intersections of the above line
         // with sides of polygon
         int count = 0, i = 0;
@@ -146,78 +159,5 @@ public class CheckifinsideObstacle
     }
 
     // // Driver Code
-    // public static void Main(String[] args)
-    // {
-    //     Vector3[] polygon1 = {new Vector3(0, 0),
-    //                         new Vector3(10, 0),
-    //                         new Vector3(10, 10),
-    //                         new Vector3(0, 10)};
-    //     int n = polygon1.Length;
-    //     Vector3 p = new Vector3(20, 20);
-    //     if (isInside(polygon1, n, p))
-    //     {
-    //         return true;
-    //         Debug.Log("Yes");
 
-    //     }
-    //     else
-    //     {
-    //         return false;
-    //         Debug.Log("No");
-    //     }
-    //     p = new Vector3(5, 5);
-    //     if (isInside(polygon1, n, p))
-    //     {
-    //         Console.WriteLine("Yes");
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No");
-    //     }
-    //     Vector3[] polygon2 = {new Vector3(0, 0),
-    //                         new Vector3(5, 5),
-    //                         new Vector3(5, 0)};
-    //     p = new Vector3(3, 3);
-    //     n = polygon2.Length;
-    //     if (isInside(polygon2, n, p))
-    //     {
-    //         Console.WriteLine("Yes");
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No");
-    //     }
-    //     p = new Vector3(5, 1);
-    //     if (isInside(polygon2, n, p))
-    //     {
-    //         Console.WriteLine("Yes");
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No");
-    //     }
-    //     p = new Vector3(8, 1);
-    //     if (isInside(polygon2, n, p))
-    //     {
-    //         Console.WriteLine("Yes");
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No");
-    //     }
-    //     Vector3[] polygon3 = {new Vector3(0, 0),
-    //                         new Vector3(10, 0),
-    //                         new Vector3(10, 10),
-    //                         new Vector3(0, 10)};
-    //     p = new Vector3(-1, 10);
-    //     n = polygon3.Length;
-    //     if (isInside(polygon3, n, p))
-    //     {
-    //         Console.WriteLine("Yes");
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No");
-    //     }
-    // }
 }
