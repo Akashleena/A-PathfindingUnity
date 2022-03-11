@@ -168,34 +168,5 @@ public class Reducewaypoints
 
         return height;
 
-        //Another option
-        //double A = Point.X - Point1.X;
-        //double B = Point.Y - Point1.Y;
-        //double C = Point2.X - Point1.X;
-        //double D = Point2.Y - Point1.Y;
-
-        //double dot = A * C + B * D;
-        //double len_sq = C * C + D * D;
-        //double param = dot / len_sq;
-
-        //double xx, yy;
-
-        //if (param < 0)
-        //{
-        //    xx = Point1.X;
-        //    yy = Point1.Y;
-        //}
-        //else if (param > 1)
-        //{
-        //    xx = Point2.X;
-        //    yy = Point2.Y;
-        //}
-        //else
-        //{
-        //    xx = Point1.X + param * C;
-        //    yy = Point1.Y + param * D;
-        //}
-
-        //Double d = DistanceBetweenOn2DPlane(Point, new Point(xx, yy));
     }
 }

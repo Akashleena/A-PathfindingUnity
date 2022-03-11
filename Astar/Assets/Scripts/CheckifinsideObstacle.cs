@@ -11,14 +11,14 @@ using UnityEngine;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-public class CheckifinsideObstacle
+public class CheckifinsideObstacle : MonoBehaviour
 {
 
     // Define Infinite (Using INT_MAX
     // caused overflow problems)
-    static int INF = 10000;
+    static float INF = 10000.0f;
     Vector3 extreme;
-
+    public LineRenderer vectorarrow;
 
     // Given three collinear points p, q, r,
     // the function checks if Vector3 q lies
@@ -42,6 +42,7 @@ public class CheckifinsideObstacle
     // 2 --> Counterclockwise
     private int orientation(Vector3 p, Vector3 q, Vector3 r)
     {
+        // https://www.geeksforgeeks.org/orientation-3-ordered-points/
         float val = (q.z - p.z) * (r.x - q.x) -
                 (q.x - p.x) * (r.z - q.z);
 
@@ -57,6 +58,7 @@ public class CheckifinsideObstacle
     private bool doIntersect(Vector3 p1, Vector3 q1,
                             Vector3 p2, Vector3 q2)
     {
+        // https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
         // Find the four orientations needed for
         // general and special cases
         int o1 = orientation(p1, q1, p2);
@@ -113,22 +115,13 @@ public class CheckifinsideObstacle
             return false;
         }
 
+        Vector3 extreme = new Vector3(INF, p.z, 0.0f);
 
-        // Create a Vector3 for line segment from p to infinite
-        // if (q == true)
-        // {
-        Vector3 extreme = new Vector3(INF, p.z);
-        // extreme = new Vector3(INF, 0, 0) - new Vector3(p.z, 0, 0);
-        Debug.Log("extreme" + extreme);
-        // }
-        // Create a Vector3 for line segment from infinite to p 
-        // else
-        // {
-        // Vector3 extreme = new Vector3(-INF, p.z);
-        // // extreme = new Vector3(-INF, 0, 0) - new Vector3(p.z, 0, 0);
-        // Debug.Log("extreme" + extreme);
-        // }
-        // Count intersections of the above line
+        Debug.Log("e x t r e m e " + extreme);
+        vectorarrow.SetPosition(1, extreme);
+
+
+
         // with sides of polygon
         int count = 0, i = 0;
         do
@@ -146,6 +139,7 @@ public class CheckifinsideObstacle
                 // on segment. If it lies, return true, otherwise false
                 if (orientation(polygon[i], p, polygon[next]) == 0)
                 {
+                    Debug.Log("C . O . L .  L . I.  N.  E.  A . R ");
                     return onSegment(polygon[i], p,
                                     polygon[next]);
                 }
@@ -157,7 +151,4 @@ public class CheckifinsideObstacle
         // Return true if count is odd, false otherwise
         return (count % 2 == 1); // Same as (count%2 == 1)
     }
-
-    // // Driver Code
-
 }
