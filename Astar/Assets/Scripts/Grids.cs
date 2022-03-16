@@ -33,7 +33,7 @@ public class Grids : MonoBehaviour
     public Vector3[] boundingRectangle;
     public int n;
 
-    public CheckifinsideObstacle co;
+    public CheckifinsideObstacle co = new CheckifinsideObstacle();
     void Awake()
     {
         nodeDiameter = nodeRadius * 2;
