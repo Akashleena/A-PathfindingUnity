@@ -115,10 +115,10 @@ public class CheckifinsideObstacle : MonoBehaviour
             return false;
         }
 
-        Vector3 extreme = new Vector3(INF, p.z, 0.0f);
+        Vector3 extreme = new Vector3(INF, p.z);
 
         Debug.Log("e x t r e m e " + extreme);
-        vectorarrow.SetPosition(1, extreme);
+        vectorarrow.SetPosition(0, extreme);
 
 
 
