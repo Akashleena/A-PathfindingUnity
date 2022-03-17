@@ -9,6 +9,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using System.Diagnostics;
+using UnityEngine.UI; //for vectorStatus
 using Debug = UnityEngine.Debug;
 
 public class CheckifinsideObstacle : MonoBehaviour
@@ -17,8 +18,17 @@ public class CheckifinsideObstacle : MonoBehaviour
     // Define Infinite (Using INT_MAX
     // caused overflow problems)
     static float INF = 10000.0f;
+    public Text vectorStatus;
     Vector3 extreme;
     public LineRenderer vectorarrow;
+
+    void Awake()
+    {
+        vectorarrow = gameObject.AddComponent<LineRenderer>(); //to initialize LineRenderer in runtime
+    }
+
+
+
 
     // Given three collinear points p, q, r,
     // the function checks if Vector3 q lies
@@ -115,7 +125,9 @@ public class CheckifinsideObstacle : MonoBehaviour
             return false;
         }
 
-        Vector3 extreme = new Vector3(INF, p.z);
+        Vector3 extreme = new Vector3(INF, 0, 0);
+        vectorStatus.text = "vector3 p.z is " + 0;
+
 
         Debug.Log("e x t r e m e " + extreme);
         vectorarrow.SetPosition(0, extreme);

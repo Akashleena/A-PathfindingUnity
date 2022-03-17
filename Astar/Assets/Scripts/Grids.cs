@@ -53,13 +53,13 @@ public class Grids : MonoBehaviour
         bool walkable;
 
         // create obstacles and bounding box
-        polygon1 = new Vector3[6];
+        polygon1 = new Vector3[5];
         polygon1[0] = new Vector3(20f, 0f, -350f);
         polygon1[1] = new Vector3(160f, 0f, -350f);
         polygon1[2] = new Vector3(200f, 0f, 200f);
         polygon1[3] = new Vector3(400f, 0, -100f);
-        polygon1[4] = new Vector3(300f, 0, -600f);
-        polygon1[5] = new Vector3(20f, 0, -350f);
+        // polygon1[4] = new Vector3(300f, 0, -600f);
+        polygon1[4] = new Vector3(20f, 0, -350f);
 
         boundingRectangle = new Vector3[4];
         float maxZ = 0.0f, maxX = 0.0f;
@@ -88,13 +88,13 @@ public class Grids : MonoBehaviour
         boundingBox.SetPosition(4, boundingRectangle[0]);
         // boundingBox.SetPosition(5, boundingRectangle[1]);
 
-        obstacleRenderer.positionCount = 6;
+        obstacleRenderer.positionCount = 5;
         obstacleRenderer.SetPosition(0, polygon1[0]);
         obstacleRenderer.SetPosition(1, polygon1[1]);
         obstacleRenderer.SetPosition(2, polygon1[2]);
         obstacleRenderer.SetPosition(3, polygon1[3]);
         obstacleRenderer.SetPosition(4, polygon1[4]);
-        obstacleRenderer.SetPosition(5, polygon1[5]);
+        // obstacleRenderer.SetPosition(5, polygon1[5]);
 
         n = polygon1.Length;
 
