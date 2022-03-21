@@ -12,9 +12,10 @@ public class Grids : MonoBehaviour
     // public bool walkable;
     public Vector2 gridWorldSize;
 
-    public Vector3 bottomRight, bottomLeft, topLeft, topRight;
+    public Vector3 bottomRight, bottomRightPoint, bottomLeft, Left;
     public float nodeRadius = 50;
     Node[,] grid;
+    Node node;
     public Vector3 worldBottomLeft;
     public LineRenderer boundingBox;
     public LineRenderer obstacleRenderer = new LineRenderer();
@@ -27,15 +28,23 @@ public class Grids : MonoBehaviour
     public float nodeDiameter;
 
 
-    public float[] perpdist;
+    public float[] perpDist;
     public int gridSizeX, gridSizeY;
     public Vector3[] polygon1;
     public Vector3[] boundingRectangle;
     public int n;
+    static float INF = 10000.0f;
+    public LineRenderer rightvectorarrow;
+    public LineRenderer leftvectorarrow;
 
-    public CheckifinsideObstacle co = new CheckifinsideObstacle();
+    public CheckifinsideObstacle co;
     void Awake()
     {
+        // rightvectorarrow = gameObject.AddComponent<LineRenderer>();
+        // leftvectorarrow = gameObject.AddComponent<LineRenderer>();
+        node = new Node(false, Vector3.zero, 0, 0, false);
+
+
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
@@ -49,17 +58,26 @@ public class Grids : MonoBehaviour
     void CreateGrid()
     {
         grid = new Node[gridSizeX, gridSizeY];
+
+        for (int i = 0; i < gridSizeX; i++)
+            for (int j = 0; j < gridSizeY; j++)
+                grid[i, j] = new Node();
+
         worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
         bool walkable;
+        Vector3 extremeright = new Vector3(INF, 0, 0);
+        Vector3 extremeleft = new Vector3(-INF, 0, 0);
+        rightvectorarrow.positionCount = 1;
+        leftvectorarrow.positionCount = 1;
 
         // create obstacles and bounding box
-        polygon1 = new Vector3[5];
+        polygon1 = new Vector3[6];
         polygon1[0] = new Vector3(20f, 0f, -350f);
         polygon1[1] = new Vector3(160f, 0f, -350f);
         polygon1[2] = new Vector3(200f, 0f, 200f);
         polygon1[3] = new Vector3(400f, 0, -100f);
-        // polygon1[4] = new Vector3(300f, 0, -600f);
-        polygon1[4] = new Vector3(20f, 0, -350f);
+        polygon1[4] = new Vector3(300f, 0, -600f);
+        polygon1[5] = new Vector3(20f, 0, -350f);
 
         boundingRectangle = new Vector3[4];
         float maxZ = 0.0f, maxX = 0.0f;
@@ -86,15 +104,15 @@ public class Grids : MonoBehaviour
         boundingBox.SetPosition(2, boundingRectangle[2]);
         boundingBox.SetPosition(3, boundingRectangle[3]);
         boundingBox.SetPosition(4, boundingRectangle[0]);
-        // boundingBox.SetPosition(5, boundingRectangle[1]);
+        // // boundingBox.SetPosition(5, boundingRectangle[1]);
 
-        obstacleRenderer.positionCount = 5;
+        obstacleRenderer.positionCount = 6;
         obstacleRenderer.SetPosition(0, polygon1[0]);
         obstacleRenderer.SetPosition(1, polygon1[1]);
         obstacleRenderer.SetPosition(2, polygon1[2]);
         obstacleRenderer.SetPosition(3, polygon1[3]);
         obstacleRenderer.SetPosition(4, polygon1[4]);
-        // obstacleRenderer.SetPosition(5, polygon1[5]);
+        obstacleRenderer.SetPosition(5, polygon1[5]);
 
         n = polygon1.Length;
 
@@ -106,39 +124,98 @@ public class Grids : MonoBehaviour
 
                 if (worldPoint.x >= minX && worldPoint.x <= maxX && worldPoint.z >= minZ && worldPoint.z <= maxZ)
                 {
-                    bottomLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter) + Vector3.forward * (y * nodeDiameter); //bottom left
-                    bottomRight = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeDiameter) + Vector3.forward * (y * nodeDiameter);//botoom right
-                    topLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeDiameter);
-                    topRight = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeDiameter);
+                    // bottomLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter) + Vector3.forward * (y * nodeDiameter); //bottom left
+                    bottomRightPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeDiameter) + Vector3.forward * (y * nodeDiameter);//botoom right
+                    // topLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeDiameter);
+                    // topRight = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeDiameter);
 
-                    Debug.Log("bottomLeft" + bottomLeft);
+                    // Debug.Log("bottomLeft" + bottomLeft);
 
-                    Debug.Log("bottomRight" + bottomRight);
-                    Debug.Log("topRight" + topRight);
-                    Debug.Log("topleft" + topLeft);
+                    // Debug.Log("bottomRight" + bottomRight);
+                    // Debug.Log("topRight" + topRight);
+                    // Debug.Log("topleft" + topLeft);
+                    bottomRight = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter);
+                    Left = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius);
+                    bottomLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter);
+                    rightvectorarrow.SetPosition(0, extremeright);
+                    leftvectorarrow.SetPosition(0, extremeleft);
 
-                    if (co.isInside(polygon1, n, topRight) ||
-                      co.isInside(polygon1, n, bottomRight) ||
-                    co.isInside(polygon1, n, topLeft) ||
-                        co.isInside(polygon1, n, bottomLeft))
+                    if //(co.isInside(polygon1, n, topRight) ||
+                      (co.isInside(polygon1, n, bottomRightPoint, extremeright))
+                    //co.isInside(polygon1, n, topLeft) ||   
                     {
 
                         walkable = false;
-                        Debug.Log("1");
+                        grid[x, y] = new Node(walkable, worldPoint, x, y, true);
+
+                        grid[x, y] = new Node(walkable, bottomRight, x, y, true);
+
+
                     }
 
+                    else if (co.isInside(polygon1, n, bottomRightPoint, extremeleft))
+                    {
+
+
+                        walkable = false;
+
+                        grid[x, y] = new Node(walkable, Left, x, y, true);
+
+                        grid[x, y] = new Node(walkable, bottomLeft, x, y, true);
+
+                    }
                     else
                     {
-                        walkable = true;
+
+
+                        node = grid[x, y];
+                        if (node.walkable != false)
+                            walkable = true;
+                        else
+                            walkable = false;
+
+                        grid[x, y] = new Node(walkable, worldPoint, x, y, true);
+                        node = grid[x, y - 1];
+                        if (node.walkable != false)
+                            walkable = true;
+                        else
+                            walkable = false;
+                        grid[x, y] = new Node(walkable, bottomRight, x, y, true);
+                        node = grid[x - 1, y];
+                        if (node.walkable != false)
+                            walkable = true;
+                        else
+                            walkable = false;
+                        grid[x, y] = new Node(walkable, Left, x, y, true);
+                        node = grid[x - 1, y - 1];
+                        if (node.walkable != false)
+                            walkable = true;
+                        else
+                            walkable = false;
+                        grid[x, y] = new Node(walkable, bottomLeft, x, y, true);
+
+
+                        //    if (node.walkable!=false)
+                        //    walkable = true;
+                        //    else
+                        //    walkable = false;
+                        //    grid[x, y] = new Node(walkable, , x, y, true);
+
+                        //   
+
+                        //    node = grid[x, y-1];
+
+
                     }
                 }
                 else
-                    walkable = true;
+                    walkable = true; //if not inside bounding box
+
 
                 Debug.Log("worldpoint" + worldPoint + "is walkable" + walkable);
 
 
-                grid[x, y] = new Node(walkable, worldPoint, x, y);
+                grid[x, y] = new Node(walkable, worldPoint, x, y, true);
                 if (walkable == false)
                 {
 

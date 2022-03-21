@@ -17,15 +17,15 @@ public class CheckifinsideObstacle : MonoBehaviour
 
     // Define Infinite (Using INT_MAX
     // caused overflow problems)
-    static float INF = 10000.0f;
+    // static float INF = 1000000.0f;
     public Text vectorStatus;
     Vector3 extreme;
-    public LineRenderer vectorarrow;
+    //public LineRenderer vectorarrow;
 
-    void Awake()
-    {
-        vectorarrow = gameObject.AddComponent<LineRenderer>(); //to initialize LineRenderer in runtime
-    }
+    // void Awake()
+    // {
+    //     vectorarrow = gameObject.AddComponent<LineRenderer>(); //to initialize LineRenderer in runtime
+    // }
 
 
 
@@ -117,7 +117,7 @@ public class CheckifinsideObstacle : MonoBehaviour
 
     // Returns true if the Vector3 p lies
     // inside the polygon[] with n vertices
-    public bool isInside(Vector3[] polygon, int n, Vector3 p)
+    public bool isInside(Vector3[] polygon, int n, Vector3 p, Vector3 extreme)
     {
         // There must be at least 3 vertices in polygon[]
         if (n < 3)
@@ -125,12 +125,14 @@ public class CheckifinsideObstacle : MonoBehaviour
             return false;
         }
 
-        Vector3 extreme = new Vector3(INF, 0, 0);
-        vectorStatus.text = "vector3 p.z is " + 0;
+        // Vector3 extreme = new Vector3(INF, 0, 0);
+        // vectorStatus.text = "vector3 p.z is " + 0;
+
+        // Vector3 extreme1 = new Vector3(-INF, 0, 0);
 
 
-        Debug.Log("e x t r e m e " + extreme);
-        vectorarrow.SetPosition(0, extreme);
+        // Debug.Log("e x t r e m e " + extreme);
+        // vectorarrow.SetPosition(0, extreme);
 
 
 
