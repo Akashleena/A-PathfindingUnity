@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using System.Diagnostics;
 using UnityEngine;
 using System.Collections;
@@ -12,7 +12,7 @@ public class Grids : MonoBehaviour
     // public bool walkable;
     public Vector2 gridWorldSize;
 
-    public Vector3 bottomRight, bottomRightPoint, bottomLeft, Left;
+    public Vector3 bottomLeftPoint, leftNode, bottomNode, bottomLeftNode;
     public float nodeRadius = 50;
     Node[,] grid;
     Node node;
@@ -27,7 +27,7 @@ public class Grids : MonoBehaviour
     [Header("Node Parameters")]
     public float nodeDiameter;
 
-
+    int obstacleGridX, obstacleGridY;
     public float[] perpDist;
     public int gridSizeX, gridSizeY;
     public Vector3[] polygon1;
@@ -67,8 +67,8 @@ public class Grids : MonoBehaviour
         bool walkable;
         Vector3 extremeright = new Vector3(INF, 0, 0);
         Vector3 extremeleft = new Vector3(-INF, 0, 0);
-        rightvectorarrow.positionCount = 1;
-        leftvectorarrow.positionCount = 1;
+        rightvectorarrow.positionCount = 2;
+        leftvectorarrow.positionCount = 2;
 
         // create obstacles and bounding box
         polygon1 = new Vector3[6];
@@ -113,8 +113,31 @@ public class Grids : MonoBehaviour
         obstacleRenderer.SetPosition(3, polygon1[3]);
         obstacleRenderer.SetPosition(4, polygon1[4]);
         obstacleRenderer.SetPosition(5, polygon1[5]);
+        Vector3 obstaclegridmidpoint;
+        //disable the grid corresponding to the vertex points of the polygon
+        for (int i = 0; i < polygon1.Length; i++)
+        {
+            obstacleGridX = (int)((polygon1[i].x + 950) / nodeDiameter);
+            obstacleGridY = (int)((polygon1[i].y + 950) / nodeDiameter);
+            obstaclegridmidpoint.x = (Mathf.Floor(polygon1[i].x / nodeDiameter) * 100) + nodeRadius;
+            obstaclegridmidpoint.z = (Mathf.Floor(polygon1[i].z / nodeDiameter) * 100) + nodeRadius;
+            obstaclegridmidpoint.y = 0;
+            Debug.Log("obstaclemidpont" + obstaclegridmidpoint.x + " " + obstaclegridmidpoint.z);
+            walkable = false;
+            grid[obstacleGridX, obstacleGridY] = new Node(walkable, obstaclegridmidpoint, obstacleGridX, obstacleGridY, true);
 
+            if (walkable == false)
+            {
+                Vector3 objectPOS0 = obstaclegridmidpoint;
+                Instantiate(testPrefab, objectPOS0, Quaternion.identity);
+            }
+        }
+
+
+        // Debug.Log("obstaclegridx" + obstacleGridX);
+        // Debug.Log("obstaclegridy" + obstacleGridY);
         n = polygon1.Length;
+
 
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -122,125 +145,146 @@ public class Grids : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
+                //make only inside the bounding box as unwalkable
                 if (worldPoint.x >= minX && worldPoint.x <= maxX && worldPoint.z >= minZ && worldPoint.z <= maxZ)
                 {
-                    // bottomLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter) + Vector3.forward * (y * nodeDiameter); //bottom left
-                    bottomRightPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeDiameter) + Vector3.forward * (y * nodeDiameter);//botoom right
-                    // topLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeDiameter);
-                    // topRight = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeDiameter);
 
-                    // Debug.Log("bottomLeft" + bottomLeft);
+                    bottomLeftPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeRadius);//botoom right
+                    bottomNode = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter); //subtract node diameter from worldpoint.y
+                    bottomLeftNode = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter);
+                    leftNode = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
-                    // Debug.Log("bottomRight" + bottomRight);
-                    // Debug.Log("topRight" + topRight);
-                    // Debug.Log("topleft" + topLeft);
-                    bottomRight = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter);
-                    Left = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-                    bottomLeft = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter);
-                    rightvectorarrow.SetPosition(0, extremeright);
-                    leftvectorarrow.SetPosition(0, extremeleft);
+                    rightvectorarrow.SetPosition(0, Vector3.zero);
+                    rightvectorarrow.SetPosition(1, extremeright);
+                    leftvectorarrow.SetPosition(0, Vector3.zero);
+                    leftvectorarrow.SetPosition(1, extremeleft);
 
-                    if //(co.isInside(polygon1, n, topRight) ||
-                      (co.isInside(polygon1, n, bottomRightPoint, extremeright))
-                    //co.isInside(polygon1, n, topLeft) ||   
+                    if (co.isInside(polygon1, n, bottomLeftPoint, extremeright))
+
                     {
 
                         walkable = false;
                         grid[x, y] = new Node(walkable, worldPoint, x, y, true);
 
-                        grid[x, y] = new Node(walkable, bottomRight, x, y, true);
+                        grid[x, y - 1] = new Node(walkable, bottomNode, x, y - 1, true);
+
+
+
+                        Vector3 objectPOS1 = worldPoint;
+                        Instantiate(testPrefab, objectPOS1, Quaternion.identity);
+
+                        Vector3 objectPOS2 = bottomNode;
+                        Instantiate(testPrefab, objectPOS2, Quaternion.identity);
 
 
                     }
 
-                    else if (co.isInside(polygon1, n, bottomRightPoint, extremeleft))
+                    if (co.isInside(polygon1, n, bottomLeftPoint, extremeleft))
                     {
 
 
                         walkable = false;
 
-                        grid[x, y] = new Node(walkable, Left, x, y, true);
+                        grid[x - 1, y] = new Node(walkable, leftNode, x - 1, y, true);
 
-                        grid[x, y] = new Node(walkable, bottomLeft, x, y, true);
+                        grid[x - 1, y - 1] = new Node(walkable, bottomLeftNode, x - 1, y - 1, true);
+
+                        Vector3 objectPOS3 = leftNode;
+                        Instantiate(testPrefab, objectPOS3, Quaternion.identity);
+
+
+                        Vector3 objectPOS4 = bottomLeftNode;
+                        Instantiate(testPrefab, objectPOS4, Quaternion.identity);
 
                     }
-                    else
+                    else // lies inside bounding box and it is walkable 
                     {
 
-
-                        node = grid[x, y];
-                        if (node.walkable != false)
-                            walkable = true;
-                        else
+                        // check if it was set non-walkable by some previous condition, if yes, let it remain non-walkable
+                        node = grid[x, y];// worldpoint
+                        if (node.walkable == false) //previously unwalkable
                             walkable = false;
+                        else
+                            walkable = true;
+
+
+
+                        if (walkable == false)
+                        {
+                            Vector3 objectPOS5 = worldPoint;
+                            Instantiate(testPrefab, objectPOS5, Quaternion.identity);
+                        }
 
                         grid[x, y] = new Node(walkable, worldPoint, x, y, true);
-                        node = grid[x, y - 1];
-                        if (node.walkable != false)
-                            walkable = true;
-                        else
+
+                        // check if it was set non-walkable by some previous condition, if yes, let it remain non-walkable
+                        node = grid[x, y - 1]; //bottomnode
+                        if (node.walkable == false)
                             walkable = false;
-                        grid[x, y] = new Node(walkable, bottomRight, x, y, true);
-                        node = grid[x - 1, y];
-                        if (node.walkable != false)
-                            walkable = true;
                         else
-                            walkable = false;
-                        grid[x, y] = new Node(walkable, Left, x, y, true);
-                        node = grid[x - 1, y - 1];
-                        if (node.walkable != false)
                             walkable = true;
-                        else
+
+
+                        if (walkable == false) //for visualization
+                        {
+                            Vector3 objectPOS6 = bottomNode;
+                            Instantiate(testPrefab, objectPOS6, Quaternion.identity);
+                        }
+
+
+                        grid[x, y - 1] = new Node(walkable, bottomNode, x, y - 1, true);
+
+
+
+
+                        node = grid[x - 1, y]; //leftNode
+                        if (node.walkable == false)//previously not walkable
                             walkable = false;
-                        grid[x, y] = new Node(walkable, bottomLeft, x, y, true);
+                        else
+                            walkable = true;
 
 
-                        //    if (node.walkable!=false)
-                        //    walkable = true;
-                        //    else
-                        //    walkable = false;
-                        //    grid[x, y] = new Node(walkable, , x, y, true);
+                        if (walkable == false)
+                        {
+                            Vector3 objectPOS7 = leftNode;
+                            Instantiate(testPrefab, objectPOS7, Quaternion.identity);
+                        }
+                        grid[x - 1, y] = new Node(walkable, leftNode, x - 1, y, true);
 
-                        //   
 
-                        //    node = grid[x, y-1];
 
+                        node = grid[x - 1, y - 1]; //bottomLeftNode
+                        if (node.walkable == false)//previously  walkable
+                            walkable = false;
+                        else
+                            walkable = true;
+
+                        if (walkable == false)
+                        {
+                            Vector3 objectPOS8 = bottomLeftNode;
+                            Instantiate(testPrefab, objectPOS8, Quaternion.identity);
+                        }
+
+                        grid[x - 1, y - 1] = new Node(walkable, bottomLeftNode, x - 1, y - 1, true);
 
                     }
                 }
-                else
-                    walkable = true; //if not inside bounding box
-
-
-                Debug.Log("worldpoint" + worldPoint + "is walkable" + walkable);
-
-
-                grid[x, y] = new Node(walkable, worldPoint, x, y, true);
-                if (walkable == false)
+                else //outside bounding box
                 {
+                    walkable = true;
 
-                    Vector3 objectPOS = worldPoint;
-                    Instantiate(testPrefab, objectPOS, Quaternion.identity);
 
+                    //   Debug.Log("worldpoint" + worldPoint + "is walkable" + walkable);
+
+
+                    grid[x, y] = new Node(walkable, worldPoint, x, y, true);
                 }
+
+
             }
         }
     }
 
-    // public bool CheckInsidePolygon(Vector3 worldPoint)
-    // {
-
-
-
-    //     //Debug.Log("n" + n);
-    //     if (co.isInside(polygon1, n, worldPoint))
-    //     {
-    //         // Debug.Log("Inside obstacle");
-    //         return true;
-    //     }
-    //     else
-    //         return false;
-    // }
 
     public List<Node> GetNeighbours(Node node)
     {
