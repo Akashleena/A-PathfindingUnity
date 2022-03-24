@@ -1,4 +1,4 @@
-using System.Xml;
+﻿using System.Xml;
 using System.Diagnostics;
 using UnityEngine;
 using System.Collections;
@@ -42,7 +42,7 @@ public class Grids : MonoBehaviour
     {
         // rightvectorarrow = gameObject.AddComponent<LineRenderer>();
         // leftvectorarrow = gameObject.AddComponent<LineRenderer>();
-        node = new Node(false, Vector3.zero, 0, 0, false);
+        node = new Node(true, Vector3.zero, 0, 0, false);
 
 
         nodeDiameter = nodeRadius * 2;
@@ -71,13 +71,13 @@ public class Grids : MonoBehaviour
         leftvectorarrow.positionCount = 2;
 
         // create obstacles and bounding box
-        polygon1 = new Vector3[6];
-        polygon1[0] = new Vector3(20f, 0f, -350f);
-        polygon1[1] = new Vector3(160f, 0f, -350f);
-        polygon1[2] = new Vector3(200f, 0f, 200f);
-        polygon1[3] = new Vector3(400f, 0, -100f);
-        polygon1[4] = new Vector3(300f, 0, -600f);
-        polygon1[5] = new Vector3(20f, 0, -350f);
+        // polygon1 = new Vector3[6];
+        // polygon1[0] = new Vector3(20f, 0f, -350f);
+        // polygon1[1] = new Vector3(160f, 0f, -350f);
+        // polygon1[2] = new Vector3(200f, 0f, 200f);
+        // polygon1[3] = new Vector3(400f, 0, -100f);
+        // polygon1[4] = new Vector3(300f, 0, -600f);
+        // polygon1[5] = new Vector3(20f, 0, -350f);
 
         boundingRectangle = new Vector3[4];
         float maxZ = 0.0f, maxX = 0.0f;
@@ -93,10 +93,10 @@ public class Grids : MonoBehaviour
             if (maxZ < polygon1[i].z)
                 maxZ = polygon1[i].z;
         }
-        boundingRectangle[0] = new Vector3(minX - nodeDiameter, 0f, minZ - nodeDiameter);
-        boundingRectangle[1] = new Vector3(maxX + nodeDiameter, 0f, minZ - nodeDiameter);
-        boundingRectangle[2] = new Vector3(maxX + nodeDiameter, 0f, maxZ + nodeDiameter);
-        boundingRectangle[3] = new Vector3(minX - nodeDiameter, 0f, maxZ + nodeDiameter);
+        boundingRectangle[0] = new Vector3(minX - (2 * nodeDiameter), 0f, minZ - (2 * nodeDiameter));
+        boundingRectangle[1] = new Vector3(maxX + (2 * nodeDiameter), 0f, minZ - (2 * nodeDiameter));
+        boundingRectangle[2] = new Vector3(maxX + (2 * nodeDiameter), 0f, maxZ + (2 * nodeDiameter));
+        boundingRectangle[3] = new Vector3(minX - (2 * nodeDiameter), 0f, maxZ + (2 * nodeDiameter));
         boundingBox.positionCount = 5;
 
         boundingBox.SetPosition(0, boundingRectangle[0]);
@@ -106,13 +106,12 @@ public class Grids : MonoBehaviour
         boundingBox.SetPosition(4, boundingRectangle[0]);
         // // boundingBox.SetPosition(5, boundingRectangle[1]);
 
-        obstacleRenderer.positionCount = 6;
-        obstacleRenderer.SetPosition(0, polygon1[0]);
-        obstacleRenderer.SetPosition(1, polygon1[1]);
-        obstacleRenderer.SetPosition(2, polygon1[2]);
-        obstacleRenderer.SetPosition(3, polygon1[3]);
-        obstacleRenderer.SetPosition(4, polygon1[4]);
-        obstacleRenderer.SetPosition(5, polygon1[5]);
+        obstacleRenderer.positionCount = polygon1.Length;
+        for (int i = 0; i < polygon1.Length; i++)
+        {
+            obstacleRenderer.SetPosition(i, polygon1[i]);
+        }
+
         Vector3 obstaclegridmidpoint;
         //disable the grid corresponding to the vertex points of the polygon
         for (int i = 0; i < polygon1.Length; i++)
@@ -122,15 +121,14 @@ public class Grids : MonoBehaviour
             obstaclegridmidpoint.x = (Mathf.Floor(polygon1[i].x / nodeDiameter) * 100) + nodeRadius;
             obstaclegridmidpoint.z = (Mathf.Floor(polygon1[i].z / nodeDiameter) * 100) + nodeRadius;
             obstaclegridmidpoint.y = 0;
-            Debug.Log("obstaclemidpont" + obstaclegridmidpoint.x + " " + obstaclegridmidpoint.z);
-            walkable = false;
-            grid[obstacleGridX, obstacleGridY] = new Node(walkable, obstaclegridmidpoint, obstacleGridX, obstacleGridY, true);
+            // Debug.Log("obstaclemidpont" + obstaclegridmidpoint.x + " " + obstaclegridmidpoint.z);
 
-            if (walkable == false)
-            {
-                Vector3 objectPOS0 = obstaclegridmidpoint;
-                Instantiate(testPrefab, objectPOS0, Quaternion.identity);
-            }
+            grid[obstacleGridX, obstacleGridY] = new Node(false, obstaclegridmidpoint, obstacleGridX, obstacleGridY, true);
+
+
+            Vector3 objectPOS0 = obstaclegridmidpoint;
+            Instantiate(testPrefab, objectPOS0, Quaternion.identity);
+
         }
 
 
@@ -146,7 +144,7 @@ public class Grids : MonoBehaviour
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
                 //make only inside the bounding box as unwalkable
-                if (worldPoint.x >= minX && worldPoint.x <= maxX && worldPoint.z >= minZ && worldPoint.z <= maxZ)
+                if (worldPoint.x >= (minX - (2.0 * nodeDiameter)) && worldPoint.x <= (maxX + (2.0f * nodeDiameter)) && worldPoint.z >= (minZ - (2 * nodeDiameter)) && worldPoint.z <= (maxZ + (2 * nodeDiameter)))
                 {
 
                     bottomLeftPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeRadius);//botoom right
@@ -168,7 +166,9 @@ public class Grids : MonoBehaviour
 
                         grid[x, y - 1] = new Node(walkable, bottomNode, x, y - 1, true);
 
+                        Debug.Log("worldpoint" + worldPoint + "walkable" + walkable);
 
+                        Debug.Log("bottomnode" + bottomNode + "walkable" + walkable);
 
                         Vector3 objectPOS1 = worldPoint;
                         Instantiate(testPrefab, objectPOS1, Quaternion.identity);
@@ -189,6 +189,11 @@ public class Grids : MonoBehaviour
 
                         grid[x - 1, y - 1] = new Node(walkable, bottomLeftNode, x - 1, y - 1, true);
 
+
+                        Debug.Log("leftNode" + leftNode + "walkable" + walkable);
+
+                        Debug.Log("bottomLeftNode" + bottomLeftNode + "walkable" + walkable);
+
                         Vector3 objectPOS3 = leftNode;
                         Instantiate(testPrefab, objectPOS3, Quaternion.identity);
 
@@ -202,6 +207,7 @@ public class Grids : MonoBehaviour
 
                         // check if it was set non-walkable by some previous condition, if yes, let it remain non-walkable
                         node = grid[x, y];// worldpoint
+                        //Debug.Log("worldpoint" + node.gridX + node.gridY);
                         if (node.walkable == false) //previously unwalkable
                             walkable = false;
                         else
@@ -213,12 +219,16 @@ public class Grids : MonoBehaviour
                         {
                             Vector3 objectPOS5 = worldPoint;
                             Instantiate(testPrefab, objectPOS5, Quaternion.identity);
+                            //  Debug.Log("else  world point" + worldPoint + "walkable" + walkable);
                         }
 
                         grid[x, y] = new Node(walkable, worldPoint, x, y, true);
 
+                        //Debug.Log("else  world point" + worldPoint + "walkable" + walkable);
                         // check if it was set non-walkable by some previous condition, if yes, let it remain non-walkable
                         node = grid[x, y - 1]; //bottomnode
+                        // Debug.Log("worldpoint" + node.gridX + node.gridY);
+
                         if (node.walkable == false)
                             walkable = false;
                         else
@@ -229,15 +239,17 @@ public class Grids : MonoBehaviour
                         {
                             Vector3 objectPOS6 = bottomNode;
                             Instantiate(testPrefab, objectPOS6, Quaternion.identity);
+                            //  Debug.Log("else  bottom node" + bottomNode + "walkable" + walkable);
+
                         }
 
 
                         grid[x, y - 1] = new Node(walkable, bottomNode, x, y - 1, true);
 
 
-
-
                         node = grid[x - 1, y]; //leftNode
+                        // Debug.Log("worldpoint" + node.gridX + node.gridY);
+
                         if (node.walkable == false)//previously not walkable
                             walkable = false;
                         else
@@ -248,12 +260,15 @@ public class Grids : MonoBehaviour
                         {
                             Vector3 objectPOS7 = leftNode;
                             Instantiate(testPrefab, objectPOS7, Quaternion.identity);
+                            // Debug.Log("else   left node" + leftNode + "walkable" + walkable);
+
                         }
                         grid[x - 1, y] = new Node(walkable, leftNode, x - 1, y, true);
 
 
-
                         node = grid[x - 1, y - 1]; //bottomLeftNode
+                        // Debug.Log("worldpoint" + node.gridX + node.gridY);
+
                         if (node.walkable == false)//previously  walkable
                             walkable = false;
                         else
@@ -263,9 +278,12 @@ public class Grids : MonoBehaviour
                         {
                             Vector3 objectPOS8 = bottomLeftNode;
                             Instantiate(testPrefab, objectPOS8, Quaternion.identity);
+                            // Debug.Log("else  left node" + bottomLeftNode + "walkable" + walkable);
+
                         }
 
                         grid[x - 1, y - 1] = new Node(walkable, bottomLeftNode, x - 1, y - 1, true);
+
 
                     }
                 }
@@ -274,10 +292,11 @@ public class Grids : MonoBehaviour
                     walkable = true;
 
 
-                    //   Debug.Log("worldpoint" + worldPoint + "is walkable" + walkable);
+                    //Debug.Log("worldpoint" + worldPoint + "is walkable" + walkable);
 
 
                     grid[x, y] = new Node(walkable, worldPoint, x, y, true);
+
                 }
 
 
