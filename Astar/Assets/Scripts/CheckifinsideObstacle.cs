@@ -153,7 +153,7 @@ public class CheckifinsideObstacle : MonoBehaviour
                 // on segment. If it lies, return true, otherwise false
                 if (orientation(polygon[i], p, polygon[next]) == 0)
                 {
-                    Debug.Log("C . O . L .  L . I.  N.  E.  A . R ");
+                    // Debug.Log("C . O . L .  L . I.  N.  E.  A . R ");
                     return onSegment(polygon[i], p,
                                     polygon[next]);
                 }
