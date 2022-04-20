@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Node
 {
@@ -9,7 +9,6 @@ public class Node
     public Vector3 worldPosition;
     public int gridX;
     public int gridY;
-
     public int gCost;
     public int hCost;
     public Node parent;

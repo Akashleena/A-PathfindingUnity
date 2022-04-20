@@ -1,0 +1,2 @@
+/Users/apple/a-star/Astar/obj/Debug/UnityEngine.TestRunner.csproj.CoreCompileInputs.cache
+/Users/apple/a-star/Astar/obj/Debug/UnityEngine.TestRunner.csproj.AssemblyReference.cache

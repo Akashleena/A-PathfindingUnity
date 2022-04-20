@@ -1,0 +1,22 @@
+﻿<Properties StartupConfiguration="{2658065D-919F-7774-6D60-18DE87776B80}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Node.cs">
+    <Files>
+      <File FileName="Assets/Scripts/DisableNodes.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/DisableVertices.cs" />
+      <File FileName="Assets/Scripts/BoundingRectangle.cs" />
+      <File FileName="Assets/Scripts/CheckifinsideObstacle.cs" />
+      <File FileName="Assets/Scripts/Pathfinding.cs" />
+      <File FileName="Assets/Scripts/IterateThroughGrid.cs" />
+      <File FileName="Assets/Scripts/Grids.cs" />
+      <File FileName="Assets/Scripts/Reducewaypoints.cs" />
+      <File FileName="Assets/Scripts/Node.cs" Line="42" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="080a99e0-dfac-4e1b-af21-e8b79b2bda87" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

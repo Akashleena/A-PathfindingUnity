@@ -117,7 +117,7 @@ public class CheckifinsideObstacle : MonoBehaviour
 
     // Returns true if the Vector3 p lies
     // inside the polygon[] with n vertices
-    public bool isInside(Vector3[] polygon, int n, Vector3 p, Vector3 extreme)
+    public bool isInside(List<Vector3> polygon, int n, Vector3 p, Vector3 extreme)
     {
         // There must be at least 3 vertices in polygon[]
         if (n < 3)
