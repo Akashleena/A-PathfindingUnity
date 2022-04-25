@@ -17,7 +17,7 @@ public class Grids : MonoBehaviour
     public float nodeRadius = 50;
     public float nodeDiameter;
     public Node[,] grid;
-    Node node;  
+    public Node node;  
    // public int noofobstacles = 1;
     public List<Vector3> unwalkableNodes = new List<Vector3>();
  
@@ -40,7 +40,7 @@ public class Grids : MonoBehaviour
        
         //BoundingRectangle br = GetComponent<BoundingRectangle>();
        
-        node = new Node(true, Vector3.zero, 0, 0);
+        node = new Node();
         
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
@@ -60,12 +60,7 @@ public class Grids : MonoBehaviour
             for (int j = 0; j < gridSizeY; j++)
                 grid[i, j] = new Node();
         
-        worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
-    
-
-     
-        
-         
+            worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
             BoundingRectangle br = gameObject.AddComponent<BoundingRectangle>();  
             List<float> bounds = br.CreateBoundingRectangle(polygon1, obstacleRenderer);
             var dv = gameObject.AddComponent<DisableVertices>();

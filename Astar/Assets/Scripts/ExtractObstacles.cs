@@ -23,7 +23,7 @@ public class ExtractObstacles : MonoBehaviour
     void Awake()
     {
         g = gameObject.GetComponent<Grids>();
-        sw = gameObject.AddComponent<SetWalkability>();
+        sw = gameObject.GetComponent<SetWalkability>();
         finalobstacleList = new List<List<Vector3>>();
         
     }

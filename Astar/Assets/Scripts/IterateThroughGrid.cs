@@ -68,7 +68,7 @@ public class IterateThroughGrid : MonoBehaviour
                         unwalkableNodes.Add(worldPoint);
                         unwalkableNodes.Add(bottomNode);
 
-                        Debug.Log(unwalkableNodes[1000000000]);
+                      
             
                     }
 
