@@ -13,117 +13,74 @@ public class Grids : MonoBehaviour
     int obstacleGridX, obstacleGridY;
     public float[] perpDist;
     public int gridSizeX, gridSizeY;
-
- 
+    List<float> bounds;
     public float nodeRadius = 50;
     public float nodeDiameter;
     public Node[,] grid;
     Node node;  
-    public int noofobstacles = 1;
-
+   // public int noofobstacles = 1;
+    public List<Vector3> unwalkableNodes = new List<Vector3>();
+ 
     [Header("DismantleObstacles")]
-    public List<Node> finalunwalkableNodes;
-
     public Vector3 worldBottomLeft;
-    public Transform testPrefab;
     public LineRenderer obstacleRenderer = new LineRenderer(); 
-    public Transform seeker;
     public Vector3 obstaclegridmidpoint;
     [Space]
+
+    BoundingRectangle br;
 
     [Header("Node Parameters")]
       public int n;
     #endregion
 
-    [Serializable]
-    public class SerializableClass
-    {
-
-        public List<Vector3> polygon1 = new List<Vector3>();
-        public float maxZ = 0.0f, maxX = 0.0f;
-        public float minX = 10000f, minZ = 10000f;
-     
-    }
-    public List<SerializableClass> obstacleList = new List<SerializableClass>();
+  
 
     void Awake()
     {
        
+        //BoundingRectangle br = GetComponent<BoundingRectangle>();
+       
+        node = new Node(true, Vector3.zero, 0, 0);
         
-        node = new Node(true, Vector3.zero, 0, 0, false);
-        finalunwalkableNodes = new List<Node>();
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
-        CreateGrid();
+        
 
     }
-    void Start()
+     void Start()
     {
 
     }
-
-      void CreateGrid()
+      public List<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleno)
     {
         grid = new Node[gridSizeX, gridSizeY];
 
         for (int i = 0; i < gridSizeX; i++)
             for (int j = 0; j < gridSizeY; j++)
                 grid[i, j] = new Node();
-
+        
         worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
     
 
-        int k = 0;
-        foreach (SerializableClass sc in obstacleList)
-        {
-            // Debug.Log("value of sc" + sc);
-
-            BoundingRectangle br = gameObject.AddComponent<BoundingRectangle>();
-            br.CreateBoundingRectangle(sc, obstacleRenderer);
-
+     
+        
+         
+            BoundingRectangle br = gameObject.AddComponent<BoundingRectangle>();  
+            List<float> bounds = br.CreateBoundingRectangle(polygon1, obstacleRenderer);
             var dv = gameObject.AddComponent<DisableVertices>();
-            dv.DisablePolygonVertex(sc, grid, worldBottomLeft,nodeDiameter, nodeRadius,
-                obstacleGridX, obstacleGridY, obstaclegridmidpoint, finalunwalkableNodes, testPrefab);
-            k++;
+            unwalkableNodes = dv.DisablePolygonVertex(polygon1, unwalkableNodes);
+        
            // Debug.Log("value of k" + k);
-        }
+        
 
         var itg = gameObject.AddComponent<IterateThroughGrid>();
-        itg.IterateGrid(gridSizeX, gridSizeY, worldBottomLeft, obstacleList, finalunwalkableNodes, grid, nodeDiameter, nodeRadius);
+        unwalkableNodes = itg.IterateGrid(gridSizeX, gridSizeY, worldBottomLeft, polygon1, unwalkableNodes, grid, nodeDiameter, nodeRadius, bounds);
 
-
-
-        //for (int x=0; x< gridSizeX; x++)
-        //{
-        //    for (int y=0; y<gridSizeY; y++)
-        //    {
-        //        Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-        //        for (int i=0; i<dismantleobstaclenodes.Count; i++)
-        //        {
-        //            if (worldPoint==dismantleobstaclenodes[i].worldPosition)
-        //            {
-        //                walkable = false;
-        //                grid[x, y] = new Node(walkable, worldPoint, x, y, true);
-
-        //                Vector3 objectPOS5 = worldPoint;
-        //                    var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
-        //                    obstacleprefab.GetComponent<Renderer>().material.color = Color.red;
-
-        //            }
-        //            else
-        //            {
-        //                walkable = true;
-        //                grid[x, y] = new Node(walkable, worldPoint, x, y, true);
-        //            }
-
-        //        }
-        //    }
-        //}
-
+        return unwalkableNodes;
 
     }
-    public List<Node> GetNeighbours(Node node)
+    public List<Node> GetNeighbours(Node node)  
     {
         List<Node> neighbours = new List<Node>();
 

@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637844044220000000
-    m_Hash: 1821130326
+      ticks: 637862296900000000
+    m_Hash: 1511596826
   m_LockFileStatus:
     m_FilePath: /Users/apple/a-star/Astar/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637844044220000000
-    m_Hash: 3047221096
+      ticks: 637862296900000000
+    m_Hash: 2520694271
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
@@ -77,6 +77,7 @@ m_PackageAssets:
         - 1.14.12
         - 1.14.13
         - 1.14.15
+        - 1.14.16
         - 1.15.1
         - 1.15.4
         - 1.15.7
@@ -84,6 +85,7 @@ m_PackageAssets:
         - 1.15.12
         - 1.15.13
         - 1.15.15
+        - 1.15.16
         - 2.0.0-preview.6
         - 2.0.0-preview.8
         - 2.0.0-preview.15
@@ -98,6 +100,7 @@ m_PackageAssets:
         - 1.15.12
         - 1.15.13
         - 1.15.15
+        - 1.15.16
         - 2.0.0-preview.6
         - 2.0.0-preview.8
         - 2.0.0-preview.15
@@ -108,7 +111,7 @@ m_PackageAssets:
         - 2.1.0-preview.3
         - 2.1.0-preview.5
         - 2.1.0-preview.6
-        verified: 1.15.15
+        verified: 1.15.16
       dependencies:
       - name: com.unity.services.core
         version: 1.0.1
@@ -202,6 +205,7 @@ m_PackageAssets:
         - 3.0.10
         - 3.0.12
         - 3.0.13
+        - 3.0.14
         compatible:
         - 1.0.2
         - 1.0.6
@@ -232,6 +236,7 @@ m_PackageAssets:
         - 3.0.10
         - 3.0.12
         - 3.0.13
+        - 3.0.14
         verified: 2.0.7
       dependencies:
       - name: com.unity.test-framework
@@ -359,12 +364,12 @@ m_PackageAssets:
         url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.visualstudio.git
         revision: ca1ece42f5a2c5484ba15a15bb975ccc1f6a1a3c
         path: 
-    - packageId: com.unity.ide.vscode@1.2.4
+    - packageId: com.unity.ide.vscode@1.2.5
       testable: 0
       isDirectDependency: 1
-      version: 1.2.4
+      version: 1.2.5
       source: 1
-      resolvedPath: /Users/apple/a-star/Astar/Library/PackageCache/com.unity.ide.vscode@1.2.4
+      resolvedPath: /Users/apple/a-star/Astar/Library/PackageCache/com.unity.ide.vscode@1.2.5
       assetPath: Packages/com.unity.ide.vscode
       name: com.unity.ide.vscode
       displayName: Visual Studio Code Editor
@@ -424,13 +429,13 @@ m_PackageAssets:
       entitlements:
         isAllowed: 1
       isAssetStorePackage: 0
-      datePublishedTicks: 637660806170000000
+      datePublishedTicks: 637800255360000000
       documentationUrl: 
       hasRepository: 1
       repository:
         type: git
-        url: git+https://github.com/Unity-Technologies/com.unity.ide.vscode.git
-        revision: 1f4f605d5c988cb610c372b5c5216c46cc8f5d30
+        url: https://github.com/Unity-Technologies/com.unity.ide.vscode.git
+        revision: b0740c80bfc2440527c317109f7c3d9100132722
         path: 
     - packageId: com.unity.test-framework@1.1.30
       testable: 0
@@ -485,12 +490,14 @@ m_PackageAssets:
         - 1.1.29
         - 1.1.30
         - 1.1.31
+        - 2.0.1-exp.1
         - 2.0.1-pre.12
         - 2.0.1-pre.18
         compatible:
         - 1.1.29
         - 1.1.30
         - 1.1.31
+        - 2.0.1-exp.1
         - 2.0.1-pre.12
         - 2.0.1-pre.18
         verified: 1.1.31
@@ -2764,6 +2771,7 @@ m_PackageAssets:
         - 1.1.0-pre.41
         - 1.1.0-pre.69
         - 1.2.0
+        - 1.3.1
         compatible:
         - 1.0.1
         - 1.1.0-pre.7
@@ -2774,6 +2782,7 @@ m_PackageAssets:
         - 1.1.0-pre.41
         - 1.1.0-pre.69
         - 1.2.0
+        - 1.3.1
         verified: 1.0.1
       dependencies:
       - name: com.unity.modules.unitywebrequest

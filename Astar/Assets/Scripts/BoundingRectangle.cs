@@ -1,38 +1,45 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 public  class BoundingRectangle : MonoBehaviour
 {
-   
-    
+
+
     /// <summary>
     /// <para>
     /// create a bounding rectangle around the polygon obstacle with sides ranging from minX-2, maxX+2, minZ-2, maxZ+2
     /// </para>
     /// </summary>
-
-   
-    public void CreateBoundingRectangle(Grids.SerializableClass sc, LineRenderer obstacleRenderer)
+    float minX = 10000, minZ = 10000;
+    float maxX = 0, maxZ = 0;
+    public List<float> bounds = new List<float>();
+    public List<float> CreateBoundingRectangle(List<Vector3> polygon1, LineRenderer obstacleRenderer)
     {
 
-        for (int i = 0; i < sc.polygon1.Count; i++)
+        for (int i = 0; i < polygon1.Count; i++)
         {
            
-            if (sc.minX > sc.polygon1[i].x)
-                sc.minX = sc.polygon1[i].x;
-            if (sc.minZ > sc.polygon1[i].z)
-                sc.minZ = sc.polygon1[i].z;
-            if (sc.maxX < sc.polygon1[i].x)
-                sc.maxX = sc.polygon1[i].x;
-            if (sc.maxZ < sc.polygon1[i].z)
-                sc.maxZ = sc.polygon1[i].z;
+            if (minX > polygon1[i].x)
+                minX = polygon1[i].x;
+            if (minZ > polygon1[i].z)
+                minZ = polygon1[i].z;
+            if (maxX < polygon1[i].x)
+                maxX = polygon1[i].x;
+            if (maxZ < polygon1[i].z)
+                maxZ = polygon1[i].z;   
         }
-       
 
-        
-        obstacleRenderer.positionCount = sc.polygon1.Count;
-        for (int i = 0; i < sc.polygon1.Count; i++)
-        {
-            obstacleRenderer.SetPosition(i, sc.polygon1[i]);
-        }
+        bounds.Add(minX);
+        bounds.Add(maxX);
+        bounds.Add(minZ);
+        bounds.Add(maxZ);
+
+        // obstacleRenderer.positionCount = polygon1.Count;
+        //for (int i = 0; i < polygon1.Count; i++)
+        //{
+        //    obstacleRenderer.SetPosition(i, polygon1[i]);
+        //}
+
+        return bounds;
 
     }
 }

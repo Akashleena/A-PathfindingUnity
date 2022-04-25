@@ -9,35 +9,34 @@ using UnityEngine;
 
 public class DisableVertices : MonoBehaviour
 {
-    public void DisablePolygonVertex(Grids.SerializableClass sc, Node[,] grid, Vector3 worldBottomLeft,
-      float nodeDiameter, float nodeRadius, int obstacleGridX, int obstacleGridY, Vector3 obstaclegridmidpoint,
-      List<Node> dismantleobstaclenodes, Transform testPrefab)
+    public List<Vector3> DisablePolygonVertex(List<Vector3>polygon1, List<Vector3> unwalkableNodes)
     {
 
-        for (int i = 0; i < sc.polygon1.Count; i++)
+        for (int i = 0; i < polygon1.Count; i++)
         {
             
-            obstacleGridX = (int)((sc.polygon1[i].x - worldBottomLeft.x) / nodeDiameter); //shift origin to (-950,-950)
-            obstacleGridY = (int)((sc.polygon1[i].y) / nodeDiameter); //z axis origin need not be shifted
-            obstaclegridmidpoint.x = (Mathf.Floor(sc.polygon1[i].x / nodeDiameter) * 100) + nodeRadius;
-            obstaclegridmidpoint.z = (Mathf.Floor(sc.polygon1[i].z / nodeDiameter) * 100) + nodeRadius;
-            obstaclegridmidpoint.y = 0;
-            // Debug.Log("obstaclemidpont" + obstaclegridmidpoint.x + " " + obstaclegridmidpoint.z);
+            //obstacleGridX = (int)((polygon1[i].x - worldBottomLeft.x) / nodeDiameter); //shift origin to (-950,-950)
+            //obstacleGridY = (int)((polygon1[i].y) / nodeDiameter); //z axis origin need not be shifted
+            //obstaclegridmidpoint.x = (Mathf.Floor(polygon1[i].x / nodeDiameter) * 100) + nodeRadius;
+            //obstaclegridmidpoint.z = (Mathf.Floor(polygon1[i].z / nodeDiameter) * 100) + nodeRadius;
+            //obstaclegridmidpoint.y = 0;
 
-            grid[obstacleGridX, obstacleGridY] = new Node(false, obstaclegridmidpoint, obstacleGridX, obstacleGridY, true);
-            dismantleobstaclenodes.Add(grid[obstacleGridX, obstacleGridY]);
+            unwalkableNodes.Add(polygon1[i]);
+            // grid[obstacleGridX, obstacleGridY] = new Node(false, obstaclegridmidpoint, obstacleGridX, obstacleGridY, true);
+            //dismantleobstaclenodes.Add(grid[obstacleGridX, obstacleGridY]);
             #region comments
             //Vector3 objectPOS0 = obstaclegridmidpoint;
             //var obstaclevertices = Instantiate(testPrefab, objectPOS0, Quaternion.identity);
             //obstaclevertices.GetComponent<Renderer>().material.color = Color.black; //remove the line renderers and disable only the vertex coordinates
             #endregion
-
+           
             // display positions of obstacles vertex and not position of corresponding grid midpoints
-            Vector3 objectPOS0 = new Vector3(sc.polygon1[i].x, sc.polygon1[i].y, sc.polygon1[i].z);
-            var obstaclevertices = Instantiate(testPrefab, objectPOS0, Quaternion.identity);
-            obstaclevertices.GetComponent<Renderer>().material.color = Color.black; //remove the line renderers and disable only the vertex coordinates
+            //Vector3 objectPOS0 = new Vector3(polygon1[i].x, polygon1[i].y, polygon1[i].z);
+            //var obstaclevertices = Instantiate(testPrefab, objectPOS0, Quaternion.identity);
+            //obstaclevertices.GetComponent<Renderer>().material.color = Color.black; //remove the line renderers and disable only the vertex coordinates
 
         }
+        return unwalkableNodes;
     }
 
    

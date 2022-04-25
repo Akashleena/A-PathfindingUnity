@@ -13,7 +13,7 @@ public class Pathfinding : MonoBehaviour
 
     public float epsilon = 110f; //for RDP tolerance
     Grids grid;
-    //GrahamScan gs;
+
     Reducewaypoints rw = new Reducewaypoints();
     //  MyScript script = obj.AddComponent<MyScript>();
     int noofwaypoints;
@@ -21,7 +21,7 @@ public class Pathfinding : MonoBehaviour
     public LineRenderer finalpathLineRenderer = new LineRenderer();
     public List<Vector3> waypoints;
     public List<Vector3> reducedwaypoints;
-    public List<Vector3> obstaclevertex;
+  
 
     public Vector3[] points;
 
@@ -57,12 +57,6 @@ public class Pathfinding : MonoBehaviour
     }
 
 
-
-    // void GrahamScan()
-    // {
-    //     gs = new GrahamScan();
-    //     gs.convexHull(obstaclevertex);
-    // }
 
 
     void GizmosBypass(List<Node> path)
