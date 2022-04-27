@@ -6,10 +6,10 @@ using Debug = UnityEngine.Debug;
 //Author : Akashleena Sarkar (akashleena.s@newspace.co.in)
 public class ExtractObstacles : MonoBehaviour
 {
-  public List<Vector3> unwalkableNodes = new List<Vector3>();
-  public List<List<Vector3>> finalobstacleList;
-  Grids g ;
-  SetWalkability sw ;
+    public List<Vector3> unwalkableNodes = new List<Vector3>();
+    public List<List<Vector3>> finalobstacleList;
+    Grids g ;
+    SetWalkability sw ;
     [Serializable]
     public class SerializableClass
     {
@@ -19,11 +19,12 @@ public class ExtractObstacles : MonoBehaviour
     public List<SerializableClass> obstacleList;
 
 
-    int k=0;
+    int obstacleid=0;
     void Awake()
     {
         g = gameObject.GetComponent<Grids>();
         sw = gameObject.GetComponent<SetWalkability>();
+       
         finalobstacleList = new List<List<Vector3>>();
         
     }
@@ -35,14 +36,17 @@ public class ExtractObstacles : MonoBehaviour
     {
         foreach (SerializableClass sc in obstacleList)
         {
-            k++;
+            obstacleid++;
             Debug.Log("hello");
-            unwalkableNodes = g.CreateGrid(sc.polygon1, k);
+            unwalkableNodes = g.CreateGrid(sc.polygon1, obstacleid);
             finalobstacleList.Add(unwalkableNodes);
         }
 
       
-        sw.SetNodewalkability(finalobstacleList, g.gridSizeX, g.gridSizeY);
+    sw.SetNodewalkability(finalobstacleList, g.gridSizeX, g.gridSizeY);
+                  
+   
+        
     }
 }
 

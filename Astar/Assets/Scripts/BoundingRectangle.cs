@@ -9,12 +9,13 @@ public  class BoundingRectangle : MonoBehaviour
     /// create a bounding rectangle around the polygon obstacle with sides ranging from minX-2, maxX+2, minZ-2, maxZ+2
     /// </para>
     /// </summary>
-    float minX = 10000, minZ = 10000;
-    float maxX = 0, maxZ = 0;
-    public List<float> bounds = new List<float>();
-    public List<float> CreateBoundingRectangle(List<Vector3> polygon1, LineRenderer obstacleRenderer)
+    
+    
+    public List<float> CreateBoundingRectangle(List<Vector3> polygon1, LineRenderer obstacleRenderer, int obstacleid)
     {
-
+        List<float> bounds = new List<float>(4);
+        float minX = 10000, minZ = 10000;
+        float maxX = 0, maxZ = 0;
         for (int i = 0; i < polygon1.Count; i++)
         {
            

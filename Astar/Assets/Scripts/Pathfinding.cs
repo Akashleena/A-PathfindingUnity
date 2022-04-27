@@ -43,18 +43,18 @@ public class Pathfinding : MonoBehaviour
 
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.D))
-        // {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
 
-        //     pathLineRenderer.positionCount = 0;
-        //     finalpathLineRenderer.positionCount = 0;
-        // }
+            pathLineRenderer.positionCount = 0;
+            finalpathLineRenderer.positionCount = 0;
+        }
 
 
-        // if (Input.GetKeyDown(KeyCode.C))
-        // {
-        //     FindPath(seeker.position, target.position);
-        // }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            FindPath(seeker.position, target.position);
+        }
     }
 
 

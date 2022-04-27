@@ -17,9 +17,26 @@ public class SetWalkability : MonoBehaviour
     }
     void Start()
     {
-       
+       pf = gameObject.GetComponent<Pathfinding>(); 
     }
-    public bool SetNodewalkability(List<List<Vector3>> finalobstacleList, int gridSizeX, int gridSizeY)
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+
+            pf.pathLineRenderer.positionCount = 0;
+            pf.finalpathLineRenderer.positionCount = 0;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            pf.FindPath(seeker.position, target.position);
+        }
+    }
+
+    public void SetNodewalkability(List<List<Vector3>> finalobstacleList, int gridSizeX, int gridSizeY)
     {
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -50,8 +67,8 @@ public class SetWalkability : MonoBehaviour
                 }
             }
         }
-
-       return true;
+            pf.FindPath(seeker.position, target.position);
+     
     }
 
 }

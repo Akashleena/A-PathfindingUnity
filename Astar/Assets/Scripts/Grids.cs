@@ -52,7 +52,7 @@ public class Grids : MonoBehaviour
     {
 
     }
-      public List<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleno)
+      public List<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
     {
         grid = new Node[gridSizeX, gridSizeY];
 
@@ -62,7 +62,7 @@ public class Grids : MonoBehaviour
         
             worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
             BoundingRectangle br = gameObject.GetComponent<BoundingRectangle>();  
-            List<float> bounds = br.CreateBoundingRectangle(polygon1, obstacleRenderer);
+            List<float> bounds = br.CreateBoundingRectangle(polygon1, obstacleRenderer, obstacleid);
             var dv = gameObject.GetComponent<DisableVertices>();
             unwalkableNodes = dv.DisablePolygonVertex(polygon1, unwalkableNodes);
       
