@@ -33,11 +33,11 @@ public  class BoundingRectangle : MonoBehaviour
         bounds.Add(minZ);
         bounds.Add(maxZ);
 
-        // obstacleRenderer.positionCount = polygon1.Count;
-        //for (int i = 0; i < polygon1.Count; i++)
-        //{
-        //    obstacleRenderer.SetPosition(i, polygon1[i]);
-        //}
+        obstacleRenderer.positionCount = polygon1.Count;
+        for (int i = 0; i < polygon1.Count; i++)
+        {
+           obstacleRenderer.SetPosition(i, polygon1[i]);
+        }
 
         return bounds;
 

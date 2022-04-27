@@ -61,16 +61,13 @@ public class Grids : MonoBehaviour
                 grid[i, j] = new Node();
         
             worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
-            BoundingRectangle br = gameObject.AddComponent<BoundingRectangle>();  
+            BoundingRectangle br = gameObject.GetComponent<BoundingRectangle>();  
             List<float> bounds = br.CreateBoundingRectangle(polygon1, obstacleRenderer);
-            var dv = gameObject.AddComponent<DisableVertices>();
+            var dv = gameObject.GetComponent<DisableVertices>();
             unwalkableNodes = dv.DisablePolygonVertex(polygon1, unwalkableNodes);
-        
-           // Debug.Log("value of k" + k);
-        
-
-        var itg = gameObject.AddComponent<IterateThroughGrid>();
-        unwalkableNodes = itg.IterateGrid(gridSizeX, gridSizeY, worldBottomLeft, polygon1, unwalkableNodes, grid, nodeDiameter, nodeRadius, bounds);
+      
+            var itg = gameObject.GetComponent<IterateThroughGrid>();
+            unwalkableNodes = itg.IterateGrid(gridSizeX, gridSizeY, worldBottomLeft, polygon1, unwalkableNodes, grid, nodeDiameter, nodeRadius, bounds);
 
         return unwalkableNodes;
 

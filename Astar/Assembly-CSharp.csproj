@@ -44,11 +44,11 @@
      <Compile Include="Assets/Unity-UI-Polygon-master/UIPolygon.cs" />
      <Compile Include="Assets/Scripts/BoundingRectangle.cs" />
      <Compile Include="Assets/Scripts/CheckifinsideObstacle.cs" />
+     <Compile Include="Assets/Scripts/ExtractObstacles.cs" />
      <Compile Include="Assets/Scripts/DisableVertices.cs" />
      <Compile Include="Assets/Scripts/Pathfinding.cs" />
      <Compile Include="Assets/Scripts/Node.cs" />
      <Compile Include="Assets/Scripts/Reducewaypoints.cs" />
-     <Compile Include="Assets/Scripts/ExtractObstacles.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/2020.3.30f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

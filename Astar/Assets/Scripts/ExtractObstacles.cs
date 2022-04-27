@@ -29,6 +29,10 @@ public class ExtractObstacles : MonoBehaviour
     }
     void Start()
     {
+        ExtractallObstacles();
+    }
+    public void ExtractallObstacles()
+    {
         foreach (SerializableClass sc in obstacleList)
         {
             k++;
@@ -36,6 +40,8 @@ public class ExtractObstacles : MonoBehaviour
             unwalkableNodes = g.CreateGrid(sc.polygon1, k);
             finalobstacleList.Add(unwalkableNodes);
         }
+
+      
         sw.SetNodewalkability(finalobstacleList, g.gridSizeX, g.gridSizeY);
     }
 }

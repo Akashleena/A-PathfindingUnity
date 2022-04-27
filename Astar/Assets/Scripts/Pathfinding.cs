@@ -22,38 +22,39 @@ public class Pathfinding : MonoBehaviour
     public List<Vector3> waypoints;
     public List<Vector3> reducedwaypoints;
   
-
+    // public ExtractObstacles eo ;
     public Vector3[] points;
 
     void Awake()
     {
-        grid = GetComponent<Grids>();
+       
+      // eo = gameObject.AddComponent<ExtractObstacles>();    
+       //grid = SetWalkability.gg();
+      
         //pathLineRenderer = new LineRenderer();
     }
 
     void Start()
     {
-        //ObstacleCoordinates();
-        // GrahamScan();
-        // FindPath(seeker.position, target.position);
-
-
+      //  eo.ExtractallObstacles();
+        grid = GetComponent<Grids>();
+        
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
+        // if (Input.GetKeyDown(KeyCode.D))
+        // {
 
-            pathLineRenderer.positionCount = 0;
-            finalpathLineRenderer.positionCount = 0;
-        }
+        //     pathLineRenderer.positionCount = 0;
+        //     finalpathLineRenderer.positionCount = 0;
+        // }
 
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            FindPath(seeker.position, target.position);
-        }
+        // if (Input.GetKeyDown(KeyCode.C))
+        // {
+        //     FindPath(seeker.position, target.position);
+        // }
     }
 
 
@@ -93,7 +94,7 @@ public class Pathfinding : MonoBehaviour
 
         // push points array to line renderer
     }
-    void FindPath(Vector3 startPos, Vector3 targetPos)
+    public void FindPath(Vector3 startPos, Vector3 targetPos)
     {
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetNode = grid.NodeFromWorldPoint(targetPos);

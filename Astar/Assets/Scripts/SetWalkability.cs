@@ -5,13 +5,21 @@ public class SetWalkability : MonoBehaviour
 {
     Grids gg;
     Node n;
+    Pathfinding pf;
     public Transform testPrefab;
+    public Transform seeker;
+    public Transform target;
     private void Awake()
     {
         gg = gameObject.GetComponent<Grids>();
+      
   
     }
-    public void SetNodewalkability(List<List<Vector3>> finalobstacleList, int gridSizeX, int gridSizeY)
+    void Start()
+    {
+       
+    }
+    public bool SetNodewalkability(List<List<Vector3>> finalobstacleList, int gridSizeX, int gridSizeY)
     {
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -26,7 +34,7 @@ public class SetWalkability : MonoBehaviour
                             {
                                 //n.walkable = false;
                                 gg.grid[x, y] = new Node(false, worldPoint, x, y);
-
+                                
                                 Vector3 objectPOS5 = worldPoint;
                                 var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
                                 obstacleprefab.GetComponent<Renderer>().material.color = Color.red;
@@ -42,6 +50,8 @@ public class SetWalkability : MonoBehaviour
                 }
             }
         }
+
+       return true;
     }
 
 }
