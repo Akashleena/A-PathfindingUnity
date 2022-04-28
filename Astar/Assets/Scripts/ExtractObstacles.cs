@@ -9,21 +9,19 @@ public class ExtractObstacles : MonoBehaviour
     public List<Vector3> unwalkableNodes = new List<Vector3>();
     public List<List<Vector3>> finalobstacleList;
     Grids g ;
-    SetWalkability sw ;
+    Pathfinding pf ;
     [Serializable]
     public class SerializableClass
     {
         public List<Vector3> polygon1 = new List<Vector3>();
 
     }
-    public List<SerializableClass> obstacleList;
-
-
+    public List<SerializableClass> obstacleList;    
     int obstacleid=0;
     void Awake()
     {
         g = gameObject.GetComponent<Grids>();
-        sw = gameObject.GetComponent<SetWalkability>();
+        pf = gameObject.GetComponent<Pathfinding>();
        
         finalobstacleList = new List<List<Vector3>>();
         
@@ -34,6 +32,7 @@ public class ExtractObstacles : MonoBehaviour
     }
     public void ExtractallObstacles()
     {
+        Debug.Log("Inside extract all obstacles");
         foreach (SerializableClass sc in obstacleList)
         {
             obstacleid++;
@@ -41,12 +40,7 @@ public class ExtractObstacles : MonoBehaviour
             unwalkableNodes = g.CreateGrid(sc.polygon1, obstacleid);
             finalobstacleList.Add(unwalkableNodes);
         }
-
-      
-    sw.SetNodewalkability(finalobstacleList, g.gridSizeX, g.gridSizeY);
-                  
-   
-        
+    pf.SetNodewalkability(finalobstacleList, g.gridSizeX, g.gridSizeY);      
     }
 }
 

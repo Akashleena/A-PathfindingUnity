@@ -9,10 +9,11 @@ using UnityEngine;
 
 public class DisableVertices : MonoBehaviour
 {
+    
     public Transform cornerPrefab;
     public List<Vector3> DisablePolygonVertex(List<Vector3>polygon1, List<Vector3> unwalkableNodes)
     {
-
+        Debug.Log("Inside disable vertices");
         for (int i = 0; i < polygon1.Count; i++)
         {
          unwalkableNodes.Add(polygon1[i]);

@@ -119,6 +119,7 @@ public class CheckifinsideObstacle : MonoBehaviour
     // inside the polygon[] with n vertices
     public bool isInside(List<Vector3> polygon, int n, Vector3 p, Vector3 extreme)
     {
+        //Debug.Log("Inside check if inside obstacle");
         // There must be at least 3 vertices in polygon[]
         if (n < 3)
         {

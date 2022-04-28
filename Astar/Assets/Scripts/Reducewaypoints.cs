@@ -100,6 +100,7 @@ public class Reducewaypoints
         points, int firstPoint, int lastPoint, double tolerance,
         ref List<int> pointIndexsToKeep)
     {
+        Debug.Log("inside douglas peucker reduction");
         double maxDistance = 0;
         int indexFarthest = 0;
         int prevIndex = 0;

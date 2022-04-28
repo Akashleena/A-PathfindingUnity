@@ -13,6 +13,7 @@ public  class BoundingRectangle : MonoBehaviour
     
     public List<float> CreateBoundingRectangle(List<Vector3> polygon1, LineRenderer obstacleRenderer, int obstacleid)
     {
+        Debug.Log("Inside Bounding rectangle");
         List<float> bounds = new List<float>(4);
         float minX = 10000, minZ = 10000;
         float maxX = 0, maxZ = 0;

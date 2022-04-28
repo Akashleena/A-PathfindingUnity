@@ -33,8 +33,6 @@ public class Grids : MonoBehaviour
       public int n;
     #endregion
 
-  
-
     void Awake()
     {
        
@@ -54,6 +52,7 @@ public class Grids : MonoBehaviour
     }
       public List<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
     {
+        Debug.Log("Inside Create grid");
         grid = new Node[gridSizeX, gridSizeY];
 
         for (int i = 0; i < gridSizeX; i++)

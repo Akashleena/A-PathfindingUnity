@@ -50,6 +50,7 @@ public class IterateThroughGrid : MonoBehaviour
 
     public List<Vector3> IterateGrid(int gridSizeX, int gridSizeY, Vector3 worldBottomLeft, List<Vector3> polygon1, List<Vector3> unwalkableNodes, Node[,] grid, float nodeDiameter, float nodeRadius, List<float> bounds)
     {
+       // Debug.Log("Inside Iterate grid");
         co = gameObject.AddComponent<CheckifinsideObstacle>();
         for (int x = 0; x < gridSizeX; x++)
         {
