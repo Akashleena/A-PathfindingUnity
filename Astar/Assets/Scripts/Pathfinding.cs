@@ -10,7 +10,7 @@ public class Pathfinding : MonoBehaviour
 {
     public Transform seeker, target;
     public float epsilon = 110f; //for RDP tolerance
-    public Grids astarGrid, newGrid;
+    public Grids myGrid;
     Reducewaypoints rw = new Reducewaypoints();
     int noofwaypoints;
     public LineRenderer pathLineRenderer = new LineRenderer();
@@ -22,7 +22,7 @@ public class Pathfinding : MonoBehaviour
     public Node[,] newNode;
     void Start()
     {
-          astarGrid = GetComponent<Grids>();
+          myGrid = GetComponent<Grids>();
     }
 
     // void Update()
@@ -41,57 +41,83 @@ public class Pathfinding : MonoBehaviour
     //     }
     // }
 
-    public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY, Grids mygrid, Grids finalGrid )
+    public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY)
     {
          Debug.Log("obstacle nodes count " + finalobstacleList.Count);            
-
-       // newGrid = mygrid;
-      //  newGrid.grid = new Node[astarGrid.gridSizeX, astarGrid.gridSizeY];
          
-            // for (int i = 0; i < astarGrid.gridSizeX; i++)
-            //     for (int j = 0; j < astarGrid.gridSizeY; j++)
-            //         newGrid.grid[i, j] = new Node();
-        
+       
+            
+         
+            for (int i = 0; i < myGrid.gridSizeX; i++)
+            {
+                for (int j = 0; j < myGrid.gridSizeY; j++)
+                {
+                    myGrid.grid[i, j] = new Node();
+                }
+            }
+
+           
               
-        for (int x = 0; x < astarGrid.gridSizeX; x++)
+       for (int x = 0; x < myGrid.gridSizeX; x++)
         {
-            for (int y = 0; y < astarGrid.gridSizeY; y++)
-            {         
-                Vector3 worldPoint = mygrid.worldBottomLeft + Vector3.right * (x * mygrid.nodeDiameter + mygrid.nodeRadius) + Vector3.forward * (y * mygrid.nodeDiameter + mygrid.nodeRadius);
+            for (int y = 0; y < myGrid.gridSizeY; y++)
+           {         
+                Vector3 worldPoint = myGrid.worldBottomLeft + Vector3.right * (x * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (y * myGrid.nodeDiameter + myGrid.nodeRadius);
+                         
                         for (int i = 0; i < finalobstacleList.Count; i++)
                         { 
+                            //Vector3 worldPoint = finalobstacleList[i];
+                            //
                             if (worldPoint.x == finalobstacleList[i].x && worldPoint.y == finalobstacleList[i].y && worldPoint.z== finalobstacleList[i].z)
                             {
-                                mygrid.grid[x, y] = new Node(false, worldPoint, x, y);
+                                //myGrid.grid[x, y] = new Node(false, worldPoint, x, y);
+                                myGrid.grid[x, y].walkable = false;
                                // finalGrid=mygrid;
                                 Vector3 objectPOS5 = worldPoint;
                                 var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
                                 obstacleprefab.GetComponent<Renderer>().material.color = Color.red;
+                                //finalGrid = mygrid; 
+                                
+                            // int k=0;
+                            // for (int a = 0; a < mygrid.gridSizeX; a++)
+                            // {
+                            //     for (int b = 0; b < mygrid.gridSizeY; b++)
+                            //     {
+                            //         if (mygrid.grid[a,b].walkable==false)
+                            //         {
+                            //         k++;
+                            //         }
+                            //     }
+                            // }
+        
+                            // Debug.Log("K = " + k); 
+                                                        
                             }
                             else
                             {
-                                mygrid.grid[x, y] = new Node(true, worldPoint, x, y);
+                                //myGrid.grid[x, y] = new Node(true, worldPoint, x, y);
+                                //myGrid.grid[x, y].walkable = true;
                                 //finalGrid=mygrid;
                             }
-                            finalGrid = mygrid;
+                            
                         }
             }
         }
 
         int k=0;
-          for (int i = 0; i < mygrid.gridSizeX; i++)
+          for (int i = 0; i < myGrid.gridSizeX; i++)
         {
-            for (int j = 0; j < mygrid.gridSizeY; j++)
+            for (int j = 0; j < myGrid.gridSizeY; j++)
             {
-                if (finalGrid.grid[i,j].walkable==false)
+                if (myGrid.grid[i,j].walkable==false)
                 {
                 k++;
                 }
             }
         }
         
-        Debug.Log("non walkable finalgrid" + k);  
-        return finalGrid;  
+        Debug.Log("K = " + k);  
+        return myGrid;  
     }
 
     void GizmosBypass(List<Node> path)
@@ -105,7 +131,7 @@ public class Pathfinding : MonoBehaviour
         pathLineRenderer.positionCount = noofwaypoints;
         foreach (Node n in path)
         {
-            points[i] = astarGrid.worldBottomLeft + Vector3.right * (n.gridX * astarGrid.nodeDiameter + astarGrid.nodeRadius) + Vector3.forward * (n.gridY * astarGrid.nodeDiameter + astarGrid.nodeRadius);
+            points[i] = myGrid.worldBottomLeft + Vector3.right * (n.gridX * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (n.gridY * myGrid.nodeDiameter + myGrid.nodeRadius);
             waypoints.Add(points[i]);
             pathLineRenderer.SetPosition(i, points[i]);
             i++;
@@ -120,27 +146,26 @@ public class Pathfinding : MonoBehaviour
        
     }
 
-    public void FindPath(Vector3 startPos, Vector3 targetPos, Grids mygrid, List<Vector3> finalobstacleList)
+    public void FindPath(Vector3 startPos, Vector3 targetPos, List<Vector3> finalobstacleList)
     {
         int noofwalkable =0;
         Debug.Log("Inside find path function");
-        Grids finalGrid = new Grids();
-        finalGrid= SetNodewalkability(finalobstacleList, astarGrid.gridSizeX, astarGrid.gridSizeY, mygrid, finalGrid);
-        Node startNode = astarGrid.NodeFromWorldPoint(startPos);
-        Node targetNode = astarGrid.NodeFromWorldPoint(targetPos);
+        myGrid= SetNodewalkability(finalobstacleList, myGrid.gridSizeX, myGrid.gridSizeY);
+        Node startNode = myGrid.NodeFromWorldPoint(startPos);
+        Node targetNode = myGrid.NodeFromWorldPoint(targetPos);
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
-        Debug.Log("mygrid gridsize is" + newGrid.gridSizeX);
-         for (int x = 0; x < astarGrid.gridSizeX; x++)
+       
+         for (int x = 0; x < myGrid.gridSizeX; x++)
         {
-            for (int y = 0; y < astarGrid.gridSizeY; y++)
+            for (int y = 0; y < myGrid.gridSizeY; y++)
             {
-                if (finalGrid.grid[x,y].walkable == false)
+                if (myGrid.grid[x,y].walkable == false)
                 noofwalkable +=1;
             }
         }
-        Debug.Log("Number of walkable " + noofwalkable);
+        Debug.Log("Number of nonwalkable " + noofwalkable);
 
         while (openSet.Count > 0)
         {
@@ -159,13 +184,13 @@ public class Pathfinding : MonoBehaviour
 
             if (node == targetNode)
             {
-                   RetracePath(startNode, targetNode, finalGrid);
+                   RetracePath(startNode, targetNode, myGrid);
 
                 return;
             }
            
 
-            foreach (Node neighbour in finalGrid.GetNeighbours(node))
+            foreach (Node neighbour in myGrid.GetNeighbours(node))
             {
                 if (!neighbour.walkable || closedSet.Contains(neighbour))
                 {
@@ -186,7 +211,7 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-    void RetracePath(Node startNode, Node endNode, Grids finalGrid)
+    void RetracePath(Node startNode, Node endNode, Grids myGrid)
     {
 
         List<Node> path = new List<Node>();
@@ -199,7 +224,7 @@ public class Pathfinding : MonoBehaviour
         }
         path.Reverse();
 
-        finalGrid.path = path;
+        myGrid.path = path;
         Debug.Log("Calling GizmosBypass");
         GizmosBypass(path);
 

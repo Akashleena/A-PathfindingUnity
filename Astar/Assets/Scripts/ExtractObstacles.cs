@@ -42,9 +42,21 @@ public class ExtractObstacles : MonoBehaviour
             for (int i=0; i<unwalkableNodes.Count; i++)
             {
                 finalobstacleList.Add(unwalkableNodes[i]);
+
             }
         }
-     pf.FindPath(seeker.position, target.position,g,finalobstacleList);     
+     //pf.FindPath(seeker.position, target.position,finalobstacleList);     
     }
+
+    void Update()
+    {
+  
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            pf.FindPath(seeker.position, target.position,finalobstacleList);
+        }
+    }
+
 }
 
