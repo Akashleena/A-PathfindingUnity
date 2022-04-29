@@ -48,13 +48,25 @@ public class Pathfinding : MonoBehaviour
        
             
          
-            for (int i = 0; i < myGrid.gridSizeX; i++)
-            {
-                for (int j = 0; j < myGrid.gridSizeY; j++)
-                {
-                    myGrid.grid[i, j] = new Node();
-                }
+            // for (int i = 0; i < myGrid.gridSizeX; i++)
+            // {
+            //     for (int j = 0; j < myGrid.gridSizeY; j++)
+            //     {
+            //         myGrid.grid[i, j] = new Node();
+            //     }
+            // }
+
+        for (int x = 0; x < myGrid.gridSizeX; x++)
+        {
+            for (int y = 0; y < myGrid.gridSizeY; y++)
+           {         
+                Vector3 worldPoint = myGrid.worldBottomLeft + Vector3.right * (x * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (y * myGrid.nodeDiameter + myGrid.nodeRadius);                      
+                        
+                myGrid.grid[x, y] = new Node(true, worldPoint, x, y);                         
+                            
+                        
             }
+        }
 
            
               
@@ -64,43 +76,22 @@ public class Pathfinding : MonoBehaviour
            {         
                 Vector3 worldPoint = myGrid.worldBottomLeft + Vector3.right * (x * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (y * myGrid.nodeDiameter + myGrid.nodeRadius);
                          
-                        for (int i = 0; i < finalobstacleList.Count; i++)
-                        { 
-                            //Vector3 worldPoint = finalobstacleList[i];
-                            //
-                            if (worldPoint.x == finalobstacleList[i].x && worldPoint.y == finalobstacleList[i].y && worldPoint.z== finalobstacleList[i].z)
-                            {
-                                //myGrid.grid[x, y] = new Node(false, worldPoint, x, y);
-                                myGrid.grid[x, y].walkable = false;
-                               // finalGrid=mygrid;
-                                Vector3 objectPOS5 = worldPoint;
-                                var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
-                                obstacleprefab.GetComponent<Renderer>().material.color = Color.red;
-                                //finalGrid = mygrid; 
-                                
-                            // int k=0;
-                            // for (int a = 0; a < mygrid.gridSizeX; a++)
-                            // {
-                            //     for (int b = 0; b < mygrid.gridSizeY; b++)
-                            //     {
-                            //         if (mygrid.grid[a,b].walkable==false)
-                            //         {
-                            //         k++;
-                            //         }
-                            //     }
-                            // }
-        
-                            // Debug.Log("K = " + k); 
-                                                        
-                            }
-                            else
-                            {
-                                //myGrid.grid[x, y] = new Node(true, worldPoint, x, y);
-                                //myGrid.grid[x, y].walkable = true;
-                                //finalGrid=mygrid;
-                            }
-                            
-                        }
+                for (int i = 0; i < finalobstacleList.Count; i++)
+                { 
+                    //Vector3 worldPoint = finalobstacleList[i];
+                    //
+                    if (worldPoint.x == finalobstacleList[i].x && worldPoint.y == finalobstacleList[i].y && worldPoint.z== finalobstacleList[i].z)
+                    {
+                        //myGrid.grid[x, y] = new Node(false, worldPoint, x, y);
+                        myGrid.grid[x, y].walkable = false;
+                    // finalGrid=mygrid;
+                        Vector3 objectPOS5 = worldPoint;
+                        var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
+                        obstacleprefab.GetComponent<Renderer>().material.color = Color.red;
+                                                                    
+                    }                          
+                    
+                }
             }
         }
 
@@ -115,8 +106,24 @@ public class Pathfinding : MonoBehaviour
                 }
             }
         }
-        
+               
         Debug.Log("K = " + k);  
+
+        int l=0;
+          for (int i = 0; i < myGrid.gridSizeX; i++)
+        {
+            for (int j = 0; j < myGrid.gridSizeY; j++)
+            {
+                if (myGrid.grid[i,j].walkable==true)
+                {
+                l++;
+                }
+            }
+        }
+               
+        Debug.Log("L = " + l);  
+
+
         return myGrid;  
     }
 
