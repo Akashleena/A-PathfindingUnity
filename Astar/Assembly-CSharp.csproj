@@ -37,7 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets/Scripts/IterateThroughGrid.cs" />
-     <Compile Include="Assets/Scripts/SetWalkability.cs" />
      <Compile Include="Assets/LineRenderSpawner.cs" />
      <Compile Include="Assets/NOMonoBehaviour.cs" />
      <Compile Include="Assets/Scripts/Grids.cs" />

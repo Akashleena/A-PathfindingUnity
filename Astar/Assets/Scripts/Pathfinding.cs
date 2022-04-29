@@ -10,7 +10,7 @@ public class Pathfinding : MonoBehaviour
 {
     public Transform seeker, target;
     public float epsilon = 110f; //for RDP tolerance
-    public Grids grid;
+    public Grids astarGrid, newGrid;
     Reducewaypoints rw = new Reducewaypoints();
     int noofwaypoints;
     public LineRenderer pathLineRenderer = new LineRenderer();
@@ -19,12 +19,10 @@ public class Pathfinding : MonoBehaviour
     public List<Vector3> reducedwaypoints;
     public Vector3[] points;
     public Transform testPrefab;
-
+    public Node[,] newNode;
     void Start()
     {
-      //  eo.ExtractallObstacles();
-        grid = GetComponent<Grids>();
-        
+          astarGrid = GetComponent<Grids>();
     }
 
     // void Update()
@@ -43,38 +41,57 @@ public class Pathfinding : MonoBehaviour
     //     }
     // }
 
-    public void SetNodewalkability(List<List<Vector3>> finalobstacleList, int gridSizeX, int gridSizeY)
+    public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY, Grids mygrid, Grids finalGrid )
     {
-        Debug.Log("Inside Set node walkability");
-        for (int x = 0; x < gridSizeX; x++)
+         Debug.Log("obstacle nodes count " + finalobstacleList.Count);            
+
+       // newGrid = mygrid;
+      //  newGrid.grid = new Node[astarGrid.gridSizeX, astarGrid.gridSizeY];
+         
+            // for (int i = 0; i < astarGrid.gridSizeX; i++)
+            //     for (int j = 0; j < astarGrid.gridSizeY; j++)
+            //         newGrid.grid[i, j] = new Node();
+        
+              
+        for (int x = 0; x < astarGrid.gridSizeX; x++)
         {
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                Debug.Log("grid.gridSizeX" + grid.gridSizeX);
-                Vector3 worldPoint = grid.worldBottomLeft + Vector3.right * (x * grid.nodeDiameter + grid.nodeRadius) + Vector3.forward * (y * grid.nodeDiameter + grid.nodeRadius);
-                foreach (var fol in finalobstacleList)
-                {
-                        for (int i = 0; i < fol.Count; i++)
+            for (int y = 0; y < astarGrid.gridSizeY; y++)
+            {         
+                Vector3 worldPoint = mygrid.worldBottomLeft + Vector3.right * (x * mygrid.nodeDiameter + mygrid.nodeRadius) + Vector3.forward * (y * mygrid.nodeDiameter + mygrid.nodeRadius);
+                        for (int i = 0; i < finalobstacleList.Count; i++)
                         { 
-                            if (worldPoint.x == fol[i].x && worldPoint.y == fol[i].y && worldPoint.z== fol[i].z)
+                            if (worldPoint.x == finalobstacleList[i].x && worldPoint.y == finalobstacleList[i].y && worldPoint.z== finalobstacleList[i].z)
                             {
-                                //n.walkable = false;
-                                grid.grid[x, y] = new Node(false, worldPoint, x, y);
+                                mygrid.grid[x, y] = new Node(false, worldPoint, x, y);
+                               // finalGrid=mygrid;
                                 Vector3 objectPOS5 = worldPoint;
                                 var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
                                 obstacleprefab.GetComponent<Renderer>().material.color = Color.red;
                             }
                             else
                             {
-                                //n.walkable = true;
-                                grid.grid[x, y] = new Node(true, worldPoint, x, y);
+                                mygrid.grid[x, y] = new Node(true, worldPoint, x, y);
+                                //finalGrid=mygrid;
                             }
+                            finalGrid = mygrid;
                         }
+            }
+        }
 
+        int k=0;
+          for (int i = 0; i < mygrid.gridSizeX; i++)
+        {
+            for (int j = 0; j < mygrid.gridSizeY; j++)
+            {
+                if (finalGrid.grid[i,j].walkable==false)
+                {
+                k++;
                 }
             }
         }
-        FindPath(seeker.position, target.position, ref grid);
+        
+        Debug.Log("non walkable finalgrid" + k);  
+        return finalGrid;  
     }
 
     void GizmosBypass(List<Node> path)
@@ -88,7 +105,7 @@ public class Pathfinding : MonoBehaviour
         pathLineRenderer.positionCount = noofwaypoints;
         foreach (Node n in path)
         {
-            points[i] = grid.worldBottomLeft + Vector3.right * (n.gridX * grid.nodeDiameter + grid.nodeRadius) + Vector3.forward * (n.gridY * grid.nodeDiameter + grid.nodeRadius);
+            points[i] = astarGrid.worldBottomLeft + Vector3.right * (n.gridX * astarGrid.nodeDiameter + astarGrid.nodeRadius) + Vector3.forward * (n.gridY * astarGrid.nodeDiameter + astarGrid.nodeRadius);
             waypoints.Add(points[i]);
             pathLineRenderer.SetPosition(i, points[i]);
             i++;
@@ -100,24 +117,26 @@ public class Pathfinding : MonoBehaviour
         {
             finalpathLineRenderer.SetPosition(j, reducedwaypoints[j]);
         }
-        // push points array to line renderer
+       
     }
 
-    public void FindPath(Vector3 startPos, Vector3 targetPos,  ref Grids mygrid)
+    public void FindPath(Vector3 startPos, Vector3 targetPos, Grids mygrid, List<Vector3> finalobstacleList)
     {
         int noofwalkable =0;
         Debug.Log("Inside find path function");
-        Node startNode = grid.NodeFromWorldPoint(startPos);
-        Node targetNode = grid.NodeFromWorldPoint(targetPos);
+        Grids finalGrid = new Grids();
+        finalGrid= SetNodewalkability(finalobstacleList, astarGrid.gridSizeX, astarGrid.gridSizeY, mygrid, finalGrid);
+        Node startNode = astarGrid.NodeFromWorldPoint(startPos);
+        Node targetNode = astarGrid.NodeFromWorldPoint(targetPos);
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
-        Debug.Log("mygrid gridsize is" + mygrid.gridSizeX);
-         for (int x = 0; x < mygrid.gridSizeX; x++)
+        Debug.Log("mygrid gridsize is" + newGrid.gridSizeX);
+         for (int x = 0; x < astarGrid.gridSizeX; x++)
         {
-            for (int y = 0; y < mygrid.gridSizeY; y++)
+            for (int y = 0; y < astarGrid.gridSizeY; y++)
             {
-                if (mygrid.grid[x,y].walkable == false)
+                if (finalGrid.grid[x,y].walkable == false)
                 noofwalkable +=1;
             }
         }
@@ -140,17 +159,14 @@ public class Pathfinding : MonoBehaviour
 
             if (node == targetNode)
             {
-                // Debug.Log(startNode.worldPosition + " " + targetNode.worldPosition);
-                Debug.Log("calling retarce path");
-                RetracePath(startNode, targetNode, ref mygrid);
+                   RetracePath(startNode, targetNode, finalGrid);
 
                 return;
             }
            
 
-            foreach (Node neighbour in mygrid.GetNeighbours(node))
+            foreach (Node neighbour in finalGrid.GetNeighbours(node))
             {
-                Debug.Log("trying to get neighbours");
                 if (!neighbour.walkable || closedSet.Contains(neighbour))
                 {
                     continue;
@@ -165,13 +181,12 @@ public class Pathfinding : MonoBehaviour
 
                     if (!openSet.Contains(neighbour))
                         openSet.Add(neighbour);
-                    Debug.Log("calculating nearest neighbours");
-                }
+                  }
             }
         }
     }
 
-    void RetracePath(Node startNode, Node endNode, ref Grids mygrid)
+    void RetracePath(Node startNode, Node endNode, Grids finalGrid)
     {
 
         List<Node> path = new List<Node>();
@@ -184,7 +199,7 @@ public class Pathfinding : MonoBehaviour
         }
         path.Reverse();
 
-        mygrid.path = path;
+        finalGrid.path = path;
         Debug.Log("Calling GizmosBypass");
         GizmosBypass(path);
 

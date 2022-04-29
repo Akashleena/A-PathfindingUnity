@@ -7,8 +7,9 @@ using Debug = UnityEngine.Debug;
 public class ExtractObstacles : MonoBehaviour
 {
     public List<Vector3> unwalkableNodes = new List<Vector3>();
-    public List<List<Vector3>> finalobstacleList;
+    public List<Vector3> finalobstacleList ;
     Grids g ;
+    public Transform seeker, target;
     Pathfinding pf ;
     [Serializable]
     public class SerializableClass
@@ -23,14 +24,14 @@ public class ExtractObstacles : MonoBehaviour
         g = gameObject.GetComponent<Grids>();
         pf = gameObject.GetComponent<Pathfinding>();
        
-        finalobstacleList = new List<List<Vector3>>();
+        finalobstacleList = new List<Vector3>();
         
     }
     void Start()
     {
         ExtractallObstacles();
     }
-    public void ExtractallObstacles()
+    public void ExtractallObstacles()   
     {
         Debug.Log("Inside extract all obstacles");
         foreach (SerializableClass sc in obstacleList)
@@ -38,9 +39,12 @@ public class ExtractObstacles : MonoBehaviour
             obstacleid++;
             Debug.Log("hello");
             unwalkableNodes = g.CreateGrid(sc.polygon1, obstacleid);
-            finalobstacleList.Add(unwalkableNodes);
+            for (int i=0; i<unwalkableNodes.Count; i++)
+            {
+                finalobstacleList.Add(unwalkableNodes[i]);
+            }
         }
-    pf.SetNodewalkability(finalobstacleList, g.gridSizeX, g.gridSizeY);      
+     pf.FindPath(seeker.position, target.position,g,finalobstacleList);     
     }
 }
 
