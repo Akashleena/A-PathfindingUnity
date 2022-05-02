@@ -58,35 +58,35 @@ public class Reducewaypoints
 
         return returnPoints;
     }
-    private bool CheckLinewalkable(Vector3 firstpoint, Vector3 secondpoint)
-    {
-        // nodeRadius = g.nodeRadius;
-        // unwalkableMask = g.unwalkableMask;
-        //int k = 0;
-        float slope = (Math.Abs(firstpoint.z - secondpoint.z)) / (Math.Abs(firstpoint.x - secondpoint.x));
-        float dist = 10f;
-        float xend = (float)(secondpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-        float zend = (float)(secondpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-        float xnew = float.MinValue;
-        float znew = float.MinValue;
-        while ((xnew <= xend) && (znew <= zend))
-        {
-            xnew = (float)(firstpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-            znew = (float)(firstpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
-            float ynew = 0.0f;
-            Vector3 newpoint = new Vector3(xnew, ynew, znew);
-            bool notcollision = !(Physics.CheckSphere(newpoint, nodeRadius, unwalkableMask));
-            if (notcollision == false)
-            {
-                return false;
-                // k = 1;
+    // private bool CheckLinewalkable(Vector3 firstpoint, Vector3 secondpoint)
+    // {
+    //     // nodeRadius = g.nodeRadius;
+    //     // unwalkableMask = g.unwalkableMask;
+    //     //int k = 0;
+    //     float slope = (Math.Abs(firstpoint.z - secondpoint.z)) / (Math.Abs(firstpoint.x - secondpoint.x));
+    //     float dist = 10f;
+    //     float xend = (float)(secondpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
+    //     float zend = (float)(secondpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
+    //     float xnew = float.MinValue;
+    //     float znew = float.MinValue;
+    //     while ((xnew <= xend) && (znew <= zend))
+    //     {
+    //         xnew = (float)(firstpoint.x + dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
+    //         znew = (float)(firstpoint.y + slope * dist * (Math.Sqrt(1 / (1 + (slope * slope)))));
+    //         float ynew = 0.0f;
+    //         Vector3 newpoint = new Vector3(xnew, ynew, znew);
+    //         bool notcollision = !(Physics.CheckSphere(newpoint, nodeRadius, unwalkableMask));
+    //         if (notcollision == false)
+    //         {
+    //             return false;
+    //             // k = 1;
 
-            }
-            firstpoint = newpoint;
-        }
-        return true;
+    //         }
+    //         firstpoint = newpoint;
+    //     }
+    //     return true;
 
-    }
+    // }
 
     /// <summary>
     /// Douglases the peucker reduction.
@@ -132,16 +132,16 @@ public class Reducewaypoints
 
 
             pointIndexsToKeep.Add(indexFarthest);
-            if (CheckLinewalkable(points[firstPoint], points[indexFarthest]))
-            {
+           // if (CheckLinewalkable(points[firstPoint], points[indexFarthest]))
+            //{
                 DouglasPeuckerReduction(points, firstPoint,
                 indexFarthest, tolerance, ref pointIndexsToKeep);
-            }
-            if (CheckLinewalkable(points[indexFarthest], points[lastPoint]))
-            {
+            //}
+            //if (CheckLinewalkable(points[indexFarthest], points[lastPoint]))
+            //{
                 DouglasPeuckerReduction(points, indexFarthest,
                 lastPoint, tolerance, ref pointIndexsToKeep);
-            }
+            //}
         }
     }
 

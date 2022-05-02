@@ -56,6 +56,12 @@ public class ExtractObstacles : MonoBehaviour
         {
             pf.FindPath(seeker.position, target.position,finalobstacleList);
         }
+         if (Input.GetKeyDown(KeyCode.D))
+        {
+
+            pf.pathLineRenderer.positionCount = 0;
+            pf.finalpathLineRenderer.positionCount = 0;
+        }
     }
 
 }
