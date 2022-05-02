@@ -10,6 +10,7 @@ public class Node
     public int gCost;
     public int hCost;
     public Node parent;
+    public float astarWeight = 1f;
 
     public Node()
     {
@@ -28,11 +29,11 @@ public class Node
         gridY = _gridY;
     }
 
-    public int fCost
+    public float fCost
     {
         get
         {
-            return gCost + hCost;
+            return (gCost + (astarWeight * hCost));
         }
     }
 }

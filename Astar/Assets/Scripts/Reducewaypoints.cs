@@ -17,12 +17,11 @@ public class Reducewaypoints
 {
     Grids g;
     public float nodeRadius;
-    public LayerMask unwalkableMask;
-
+    
     public void Grid()
     {
         nodeRadius = g.nodeRadius;
-        unwalkableMask = g.unwalkableMask;
+       
     }
 
     public List<Vector3> DouglasPeuckerReduction

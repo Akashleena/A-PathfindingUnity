@@ -24,37 +24,9 @@ public class Pathfinding : MonoBehaviour
     {
           myGrid = GetComponent<Grids>();
     }
-
-    // void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.D))
-    //     {
-
-    //         pathLineRenderer.positionCount = 0;
-    //         finalpathLineRenderer.positionCount = 0;
-    //     }
-
-
-    //     if (Input.GetKeyDown(KeyCode.C))
-    //     {
-    //         FindPath(seeker.position, target.position);
-    //     }
-    // }
-
     public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY)
     {
          Debug.Log("obstacle nodes count " + finalobstacleList.Count);            
-         
-       
-            
-         
-            // for (int i = 0; i < myGrid.gridSizeX; i++)
-            // {
-            //     for (int j = 0; j < myGrid.gridSizeY; j++)
-            //     {
-            //         myGrid.grid[i, j] = new Node();
-            //     }
-            // }
 
         for (int x = 0; x < myGrid.gridSizeX; x++)
         {
@@ -107,7 +79,7 @@ public class Pathfinding : MonoBehaviour
             }
         }
                
-        Debug.Log("K = " + k);  
+        Debug.Log("Total non walkable nodes = " + k);  
 
         int l=0;
           for (int i = 0; i < myGrid.gridSizeX; i++)
@@ -120,10 +92,8 @@ public class Pathfinding : MonoBehaviour
                 }
             }
         }
-               
-        Debug.Log("L = " + l);  
-
-
+            
+        Debug.Log("Total walkable nodes = " + l);  
         return myGrid;  
     }
 
@@ -156,7 +126,6 @@ public class Pathfinding : MonoBehaviour
     public void FindPath(Vector3 startPos, Vector3 targetPos, List<Vector3> finalobstacleList)
     {
         int noofwalkable =0;
-        Debug.Log("Inside find path function");
         myGrid= SetNodewalkability(finalobstacleList, myGrid.gridSizeX, myGrid.gridSizeY);
         Node startNode = myGrid.NodeFromWorldPoint(startPos);
         Node targetNode = myGrid.NodeFromWorldPoint(targetPos);
@@ -172,8 +141,6 @@ public class Pathfinding : MonoBehaviour
                 noofwalkable +=1;
             }
         }
-        Debug.Log("Number of nonwalkable " + noofwalkable);
-
         while (openSet.Count > 0)
         {
             Node node = openSet[0];
@@ -232,7 +199,6 @@ public class Pathfinding : MonoBehaviour
         path.Reverse();
 
         myGrid.path = path;
-        Debug.Log("Calling GizmosBypass");
         GizmosBypass(path);
 
     }

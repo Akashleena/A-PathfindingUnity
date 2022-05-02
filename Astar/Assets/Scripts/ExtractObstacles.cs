@@ -45,7 +45,7 @@ public class ExtractObstacles : MonoBehaviour
 
             }
         }
-     //pf.FindPath(seeker.position, target.position,finalobstacleList);     
+      
     }
 
     void Update()

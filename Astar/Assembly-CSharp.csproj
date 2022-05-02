@@ -36,15 +36,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets/Scripts/IterateThroughGrid.cs" />
-     <Compile Include="Assets/LineRenderSpawner.cs" />
-     <Compile Include="Assets/NOMonoBehaviour.cs" />
      <Compile Include="Assets/Scripts/Grids.cs" />
      <Compile Include="Assets/Unity-UI-Polygon-master/UIPolygon.cs" />
-     <Compile Include="Assets/Scripts/BoundingRectangle.cs" />
-     <Compile Include="Assets/Scripts/CheckifinsideObstacle.cs" />
      <Compile Include="Assets/Scripts/ExtractObstacles.cs" />
-     <Compile Include="Assets/Scripts/DisableVertices.cs" />
      <Compile Include="Assets/Scripts/Pathfinding.cs" />
      <Compile Include="Assets/Scripts/Node.cs" />
      <Compile Include="Assets/Scripts/Reducewaypoints.cs" />
