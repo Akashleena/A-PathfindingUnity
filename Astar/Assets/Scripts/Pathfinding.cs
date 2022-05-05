@@ -74,6 +74,7 @@ public class Pathfinding : MonoBehaviour
             {
                 if (myGrid.grid[i,j].walkable==false)
                 {
+                   // Debug.Log(myGrid.grid[i,j].worldPosition);
                 k++;
                 }
             }

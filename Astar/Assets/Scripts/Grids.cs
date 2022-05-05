@@ -11,6 +11,10 @@ public class Grids : MonoBehaviour
     public Vector2 gridWorldSize;
     int obstacleGridX, obstacleGridY;
     public int gridSizeX, gridSizeY;
+   
+     public List<Vector3> vertexmidpoints = new List<Vector3>();
+    public List<Vector3> vertexmidpoints1 = new List<Vector3>();
+
     
     public float nodeRadius = 50;
     public float nodeDiameter;
@@ -28,6 +32,8 @@ public class Grids : MonoBehaviour
     [Header("Unwalkable nodes")]
     [Space]
     public List<Vector3> unwalkableNodes = new List<Vector3>();
+    public List<Vector3> vertex;
+    public List<Vector3> insidevertex ;
     public int n;
     
     [Header("Point lies inside Polygon Algo variables")]
@@ -57,15 +63,29 @@ public class Grids : MonoBehaviour
       public List<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
     {   
         grid = new Node[gridSizeX, gridSizeY];
-
+        insidevertex = new List<Vector3>();
+        vertex = new List<Vector3>();
         for (int i = 0; i < gridSizeX; i++)
             for (int j = 0; j < gridSizeY; j++)
                 grid[i, j] = new Node();
         
             worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
             bounds = CreateBoundingRectangle(polygon1, obstacleRenderer, obstacleid);
-            unwalkableNodes = DisablePolygonVertex(polygon1, unwalkableNodes);   
-            unwalkableNodes = FindunwalkableNodes(polygon1, unwalkableNodes);
+            Debug.Log("B O U N D S");
+            Debug.Log(bounds[0] + " " +bounds[1] + " " +bounds[2] + " " +bounds[3] + " " );
+
+            vertex = DisablePolygonVertex(polygon1, vertex);   
+            //  Debug.Log("vertex count" + vertex.Count);
+            insidevertex = FindunwalkableNodes(polygon1, insidevertex, obstacleid, bounds);
+              Debug.Log("Inside Vertex count" + insidevertex.Count);
+            for(int i=0; i<insidevertex.Count; i++)
+            {
+                unwalkableNodes.Add(insidevertex[i]);
+               // Debug.Log("Inside Vertex added" + insidevertex[i]);
+                
+            }
+
+        
 
         return unwalkableNodes;
 
@@ -75,7 +95,7 @@ public class Grids : MonoBehaviour
     {
         List<float> bounds = new List<float>(4);
         float minX = 10000, minZ = 10000;
-        float maxX = 0, maxZ = 0;
+        float maxX = -10000, maxZ = -10000;
         for (int i = 0; i < polygon1.Count; i++)
         {
            
@@ -84,9 +104,15 @@ public class Grids : MonoBehaviour
             if (minZ > polygon1[i].z)
                 minZ = polygon1[i].z;
             if (maxX < polygon1[i].x)
+                {
                 maxX = polygon1[i].x;
+                Debug.Log("maxX" + maxX);
+                }
             if (maxZ < polygon1[i].z)
+            {
                 maxZ = polygon1[i].z;   
+                Debug.Log("maxZ" + maxZ);
+            }
         }
 
         bounds.Add(minX);
@@ -104,73 +130,84 @@ public class Grids : MonoBehaviour
 
     }
 
-    public List<Vector3> DisablePolygonVertex(List<Vector3>polygon1, List<Vector3> unwalkableNodes)
+    public List<Vector3> DisablePolygonVertex(List<Vector3>polygon1, List<Vector3> vertex)
     {
          for (int i = 0; i < polygon1.Count; i++)
         {
-         unwalkableNodes.Add(polygon1[i]);
+         vertex.Add(polygon1[i]);
          Vector3 objectPOS1 = polygon1[i];
          var obstacleprefab = Instantiate(cornerPrefab, objectPOS1, Quaternion.identity);
          obstacleprefab.GetComponent<Renderer>().material.color = Color.blue;
       
         }
      
-        return unwalkableNodes;
+        return vertex;
     }
 
-    public List<Vector3> FindunwalkableNodes(List<Vector3> polygon1, List<Vector3> unwalkableNodes)
+    public List<Vector3> FindunwalkableNodes(List<Vector3> polygon1, List<Vector3> insidevertex, int obstacleid, List<float> bounds)
     {
-       // Debug.Log("Inside Iterate grid");
+        
+        Debug.Log("Calling find unwalkable");
+        Debug.Log("bounds" + bounds[0] +" "+ bounds[1] +" " +bounds[2] +" "+ bounds[3] +" "+  "obstcaleid" + obstacleid);
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-
+                int t=0;
                 //make only inside the bounding box as unwalkable everything outside bb will be walkable
                 if (worldPoint.x >= (bounds[0] - (2.0 * nodeDiameter)) && worldPoint.x <= (bounds[1] + (2.0f * nodeDiameter)) && worldPoint.z >= (bounds[2] - (2 * nodeDiameter)) && worldPoint.z <= (bounds[3] + (2 * nodeDiameter)))
                 {
                     calculateFouradjnodes(x, y);
+                    // Debug.Log("polygon1" + polygon1.Count);
+                    // for (int i=0;i<polygon1.Count;i++)
+                    // Debug.Log("polygon1" + polygon1[i]);
+                    // Debug.Log("bottomleftpoint" + bottomLeftPoint);
+                    // Debug.Log("extremeright" + extremeright);
+
 
                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeright))
                     {
-                        walkable = false;
-                        unwalkableNodes.Add(worldPoint);
-                        unwalkableNodes.Add(bottomNode);
-
+                        //flag++;
+                        insidevertex.Add(worldPoint);
+                        insidevertex.Add(bottomNode);
+                       
                     }
 
                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeleft))
                     {
-                        walkable = false;
-                        unwalkableNodes.Add(leftNode);
-                        unwalkableNodes.Add(bottomLeftNode);
-
+                        
+                        insidevertex.Add(leftNode);
+                        insidevertex.Add(bottomLeftNode);
+                        // Debug.Log("worldposition added" + leftNode);
+                        // Debug.Log("worldposition added" + bottomLeftNode);
                     }
 
-                    else // lies inside bounding box and it is walkable 
-                    {
+                    // else // lies inside bounding box and it is walkable 
+                    // {
 
-                        CheckWalkableNodesinsideBoundingBox(x, y, worldPoint, unwalkableNodes, "worldpoint");
-                        CheckWalkableNodesinsideBoundingBox(x, (y - 1), bottomNode, unwalkableNodes, "bottomnode");
-                        CheckWalkableNodesinsideBoundingBox((x - 1), y, leftNode, unwalkableNodes, "leftnode");
-                        CheckWalkableNodesinsideBoundingBox((x - 1), (y - 1), bottomLeftNode, unwalkableNodes, "bottomleftnode");
-                    }
+                    //     CheckWalkableNodesinsideBoundingBox(x, y, worldPoint, insidevertex, "worldpoint");
+                    //     CheckWalkableNodesinsideBoundingBox(x, (y - 1), bottomNode, insidevertex, "bottomnode");
+                    //     CheckWalkableNodesinsideBoundingBox((x - 1), y, leftNode, insidevertex, "leftnode");
+                    //     CheckWalkableNodesinsideBoundingBox((x - 1), (y - 1), bottomLeftNode, insidevertex, "bottomleftnode");
+                    // }
+                    
                 }
             }
         }
-        return unwalkableNodes;
+            // Debug.Log("flag" + flag + "obstacle number" + obstacleid);
+        return insidevertex;
     }
 
-    private void CheckWalkableNodesinsideBoundingBox(int x, int y, Vector3 worldposition, List<Vector3> unwalkableNodes, String bbnode)
-    {
-        node = grid[x, y];// worldpoint
-        if (node.walkable == false) //previously unwalkable
-        {
-            walkable = false;
-            unwalkableNodes.Add(worldposition);
-        }
-    }
+    // private void CheckWalkableNodesinsideBoundingBox(int x, int y, Vector3 worldposition, List<Vector3> insidevertex, String bbnode)
+    // {
+    //     node = grid[x, y];// worldpoint
+    //     if (node.walkable == false) //previously unwalkable
+    //     {
+    //         walkable = false;
+    //         insidevertex.Add(worldposition);
+    //     }
+    // }
 
      private void calculateFouradjnodes(int x, int y)
     {
@@ -265,6 +302,7 @@ public class Grids : MonoBehaviour
     // inside the polygon[] with n vertices
     public bool checkinsidePolygon(List<Vector3> polygon, int n, Vector3 p, Vector3 extreme)
     {
+        
         if (n < 3)
         {
             return false;

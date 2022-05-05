@@ -39,8 +39,10 @@ public class ExtractObstacles : MonoBehaviour
             obstacleid++;
             Debug.Log("hello");
             unwalkableNodes = g.CreateGrid(sc.polygon1, obstacleid);
+            Debug.Log("OBSTACLE NUMBER = " + obstacleid);
             for (int i=0; i<unwalkableNodes.Count; i++)
             {
+               // Debug.Log("unwalkable nodes = " + unwalkableNodes[i]);
                 finalobstacleList.Add(unwalkableNodes[i]);
 
             }
