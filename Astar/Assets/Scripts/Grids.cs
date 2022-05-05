@@ -139,11 +139,11 @@ public class Grids : MonoBehaviour
                         insidevertex.Add(worldPoint);
                         insidevertex.Add(bottomNode);
                          Vector3 objectPOS0 = worldPoint;
-                        var testPrefab1=Instantiate(testPrefab, objectPOS0, Quaternion.identity);
-                        testPrefab1.GetComponent<Renderer>().material.color = Color.red;
-                         Vector3 objectPOS1 = bottomNode;
-                        var testPrefab2=Instantiate(testPrefab, objectPOS1, Quaternion.identity);
-                        testPrefab2.GetComponent<Renderer>().material.color = Color.red;
+                        // var testPrefab1=Instantiate(testPrefab, objectPOS0, Quaternion.identity);
+                        // testPrefab1.GetComponent<Renderer>().material.color = Color.red;
+                        //  Vector3 objectPOS1 = bottomNode;
+                        // var testPrefab2=Instantiate(testPrefab, objectPOS1, Quaternion.identity);
+                        // testPrefab2.GetComponent<Renderer>().material.color = Color.red;
                     }
 
                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeleft))
@@ -151,11 +151,11 @@ public class Grids : MonoBehaviour
                         insidevertex.Add(leftNode);
                         insidevertex.Add(bottomLeftNode);
                          Vector3 objectPOS2 = leftNode;
-                        var testPrefab3=Instantiate(testPrefab, objectPOS2, Quaternion.identity);
-                        testPrefab3.GetComponent<Renderer>().material.color = Color.red;
-                         Vector3 objectPOS3 = bottomLeftNode;
-                        var testPrefab4=Instantiate(testPrefab, objectPOS3, Quaternion.identity);
-                        testPrefab4.GetComponent<Renderer>().material.color = Color.red;
+                        // var testPrefab3=Instantiate(testPrefab, objectPOS2, Quaternion.identity);
+                        // testPrefab3.GetComponent<Renderer>().material.color = Color.red;
+                        //  Vector3 objectPOS3 = bottomLeftNode;
+                        // var testPrefab4=Instantiate(testPrefab, objectPOS3, Quaternion.identity);
+                        // testPrefab4.GetComponent<Renderer>().material.color = Color.red;
                     }
                 }
             }
