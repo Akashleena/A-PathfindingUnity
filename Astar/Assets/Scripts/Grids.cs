@@ -34,7 +34,7 @@ public class Grids : MonoBehaviour
     public List<Vector3> unwalkableNodes = new List<Vector3>();
     public List<Vector3> vertex;
     public List<Vector3> insidevertex ;
-    public HashSet<Vector3> unwalkableNodesSet = new HashSet<Vector3>();
+    public HashSet<Vector3> unwalkableNodesSet;
     public int n;
     
     [Header("Point lies inside Polygon Algo variables")]
@@ -63,6 +63,7 @@ public class Grids : MonoBehaviour
     }
       public HashSet<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
     {   
+        unwalkableNodesSet = new HashSet<Vector3>();
         grid = new Node[gridSizeX, gridSizeY];
         insidevertex = new List<Vector3>();
         vertex = new List<Vector3>();
@@ -72,24 +73,14 @@ public class Grids : MonoBehaviour
         
             worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
             bounds = CreateBoundingRectangle(polygon1, obstacleRenderer, obstacleid);
-            // Debug.Log("B O U N D S");
-            // Debug.Log(bounds[0] + " " +bounds[1] + " " +bounds[2] + " " +bounds[3] + " " );
-
             vertex = DisablePolygonVertex(polygon1, vertex);   
-            //  Debug.Log("vertex count" + vertex.Count);
             insidevertex = FindunwalkableNodes(polygon1, insidevertex, obstacleid, bounds);
-              Debug.Log("List count" + insidevertex.Count);
-
-           
+            Debug.Log("List count" + insidevertex.Count);
             for(int i=0; i<insidevertex.Count; i++)
             {
-                unwalkableNodesSet.Add(insidevertex[i]);
-               // Debug.Log("Inside Vertex added" + insidevertex[i]);
-                
+                unwalkableNodesSet.Add(insidevertex[i]);              
             }
             Debug.Log("hashset count" + unwalkableNodesSet.Count);
-        
-
         return unwalkableNodesSet;
 
     }
@@ -101,21 +92,14 @@ public class Grids : MonoBehaviour
         float maxX = -10000, maxZ = -10000;
         for (int i = 0; i < polygon1.Count; i++)
         {
-           
             if (minX > polygon1[i].x)
                 minX = polygon1[i].x;
             if (minZ > polygon1[i].z)
                 minZ = polygon1[i].z;
             if (maxX < polygon1[i].x)
-            {
                 maxX = polygon1[i].x;
-               
-            }
             if (maxZ < polygon1[i].z)
-            {
                 maxZ = polygon1[i].z;   
-           
-            }        
         }
         bounds.Add(minX);
         bounds.Add(maxX);
@@ -127,9 +111,7 @@ public class Grids : MonoBehaviour
         {
            obstacleRenderer.SetPosition(i, polygon1[i]);
         }
-
         return bounds;
-
     }
 
     public List<Vector3> DisablePolygonVertex(List<Vector3>polygon1, List<Vector3> vertex)
@@ -140,7 +122,6 @@ public class Grids : MonoBehaviour
          Vector3 objectPOS1 = polygon1[i];
           Instantiate(cornerPrefab, objectPOS1, Quaternion.identity);
         //  obstacleprefab.GetComponent<Renderer>().material.color = Color.blue;
-      
         }
      
         return vertex;
@@ -155,20 +136,11 @@ public class Grids : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                 int t=0;
-                //make only inside the bounding box as unwalkable everything outside bb will be walkable
                 if (worldPoint.x >= (bounds[0] - (2.0 * nodeDiameter)) && worldPoint.x <= (bounds[1] + (2.0f * nodeDiameter)) && worldPoint.z >= (bounds[2] - (2 * nodeDiameter)) && worldPoint.z <= (bounds[3] + (2 * nodeDiameter)))
                 {
                     calculateFouradjnodes(x, y);
-                    // Debug.Log("polygon1" + polygon1.Count);
-                    // for (int i=0;i<polygon1.Count;i++)
-                    // Debug.Log("polygon1" + polygon1[i]);
-                    // Debug.Log("bottomleftpoint" + bottomLeftPoint);
-                    // Debug.Log("extremeright" + extremeright);
-
-
-                    if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeright))
+                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeright))
                     {
-                        //flag++;
                         insidevertex.Add(worldPoint);
                         insidevertex.Add(bottomNode);
                          Vector3 objectPOS0 = worldPoint;
@@ -177,50 +149,25 @@ public class Grids : MonoBehaviour
                          Vector3 objectPOS1 = bottomNode;
                         var testPrefab2=Instantiate(testPrefab, objectPOS1, Quaternion.identity);
                         testPrefab2.GetComponent<Renderer>().material.color = Color.blue;
-
                     }
 
                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeleft))
                     {
-                        
                         insidevertex.Add(leftNode);
                         insidevertex.Add(bottomLeftNode);
                          Vector3 objectPOS2 = leftNode;
                         var testPrefab3=Instantiate(testPrefab, objectPOS2, Quaternion.identity);
                         testPrefab3.GetComponent<Renderer>().material.color = Color.blue;
-
                          Vector3 objectPOS3 = bottomLeftNode;
                         var testPrefab4=Instantiate(testPrefab, objectPOS3, Quaternion.identity);
                         testPrefab4.GetComponent<Renderer>().material.color = Color.blue;
-                        // Debug.Log("worldposition added" + leftNode);
-                        // Debug.Log("worldposition added" + bottomLeftNode);
                     }
-
-                    // else // lies inside bounding box and it is walkable 
-                    // {
-
-                    //     CheckWalkableNodesinsideBoundingBox(x, y, worldPoint, insidevertex, "worldpoint");
-                    //     CheckWalkableNodesinsideBoundingBox(x, (y - 1), bottomNode, insidevertex, "bottomnode");
-                    //     CheckWalkableNodesinsideBoundingBox((x - 1), y, leftNode, insidevertex, "leftnode");
-                    //     CheckWalkableNodesinsideBoundingBox((x - 1), (y - 1), bottomLeftNode, insidevertex, "bottomleftnode");
-                    // }
-                    
                 }
             }
         }
              Debug.Log("inside function insidevertex " + insidevertex.Count);
         return insidevertex;
     }
-
-    // private void CheckWalkableNodesinsideBoundingBox(int x, int y, Vector3 worldposition, List<Vector3> insidevertex, String bbnode)
-    // {
-    //     node = grid[x, y];// worldpoint
-    //     if (node.walkable == false) //previously unwalkable
-    //     {
-    //         walkable = false;
-    //         insidevertex.Add(worldposition);
-    //     }
-    // }
 
      private void calculateFouradjnodes(int x, int y)
     {
@@ -261,9 +208,7 @@ public class Grids : MonoBehaviour
         return (val > 0) ? 1 : 2; // clock or counterclock wise
     }
 
-    // The function that returns true if
-    // line segment 'p1q1' and 'p2q2' intersect.
-    private bool doIntersect(Vector3 p1, Vector3 q1,
+       private bool doIntersect(Vector3 p1, Vector3 q1,
                             Vector3 p2, Vector3 q2)
     {
         // https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
