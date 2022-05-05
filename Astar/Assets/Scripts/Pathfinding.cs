@@ -26,7 +26,7 @@ public class Pathfinding : MonoBehaviour
     }
     public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY)
     {
-         Debug.Log("obstacle nodes count " + finalobstacleList.Count);            
+         Debug.Log("final obstacle list count " + finalobstacleList.Count);            
 
         for (int x = 0; x < myGrid.gridSizeX; x++)
         {

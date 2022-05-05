@@ -6,7 +6,8 @@ using Debug = UnityEngine.Debug;
 //Author : Akashleena Sarkar (akashleena.s@newspace.co.in)
 public class ExtractObstacles : MonoBehaviour
 {
-    public List<Vector3> unwalkableNodes = new List<Vector3>();
+    //public List<Vector3> unwalkableNodes = new List<Vector3>();
+     public HashSet<Vector3> unwalkableNodesSet = new HashSet<Vector3>();
     public List<Vector3> finalobstacleList ;
     Grids g ;
     public Transform seeker, target;
@@ -38,15 +39,20 @@ public class ExtractObstacles : MonoBehaviour
         {
             obstacleid++;
             Debug.Log("hello");
-            unwalkableNodes = g.CreateGrid(sc.polygon1, obstacleid);
+            unwalkableNodesSet = g.CreateGrid(sc.polygon1, obstacleid);
             Debug.Log("OBSTACLE NUMBER = " + obstacleid);
-            for (int i=0; i<unwalkableNodes.Count; i++)
-            {
-               // Debug.Log("unwalkable nodes = " + unwalkableNodes[i]);
-                finalobstacleList.Add(unwalkableNodes[i]);
+            // for (int i=0; i<unwalkableNodes.Count; i++)
+            // {
+            //    // Debug.Log("unwalkable nodes = " + unwalkableNodes[i]);
+            //     finalobstacleList.Add(unwalkableNodes[i]);
 
+            // }
+            foreach(Vector3 obsSet in unwalkableNodesSet)
+            {
+                finalobstacleList.Add(obsSet);
             }
         }
+        
       
     }
 

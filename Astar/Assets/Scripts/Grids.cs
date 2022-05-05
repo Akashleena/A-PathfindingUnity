@@ -12,7 +12,7 @@ public class Grids : MonoBehaviour
     int obstacleGridX, obstacleGridY;
     public int gridSizeX, gridSizeY;
    
-     public List<Vector3> vertexmidpoints = new List<Vector3>();
+    public List<Vector3> vertexmidpoints = new List<Vector3>();
     public List<Vector3> vertexmidpoints1 = new List<Vector3>();
 
     
@@ -34,6 +34,7 @@ public class Grids : MonoBehaviour
     public List<Vector3> unwalkableNodes = new List<Vector3>();
     public List<Vector3> vertex;
     public List<Vector3> insidevertex ;
+    public HashSet<Vector3> unwalkableNodesSet = new HashSet<Vector3>();
     public int n;
     
     [Header("Point lies inside Polygon Algo variables")]
@@ -41,7 +42,7 @@ public class Grids : MonoBehaviour
     public Vector3 bottomLeftPoint, leftNode, bottomNode, bottomLeftNode;
     static float INF = 10000.0f;
     public bool walkable;
-    private Transform testPrefab;
+    public Transform testPrefab;
     Vector3 extremeright = new Vector3(INF, 0, 0);
     Vector3 extremeleft = new Vector3(-INF, 0, 0);
     Vector3 extreme;
@@ -60,7 +61,7 @@ public class Grids : MonoBehaviour
     {
 
     }
-      public List<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
+      public HashSet<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
     {   
         grid = new Node[gridSizeX, gridSizeY];
         insidevertex = new List<Vector3>();
@@ -71,23 +72,25 @@ public class Grids : MonoBehaviour
         
             worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
             bounds = CreateBoundingRectangle(polygon1, obstacleRenderer, obstacleid);
-            Debug.Log("B O U N D S");
-            Debug.Log(bounds[0] + " " +bounds[1] + " " +bounds[2] + " " +bounds[3] + " " );
+            // Debug.Log("B O U N D S");
+            // Debug.Log(bounds[0] + " " +bounds[1] + " " +bounds[2] + " " +bounds[3] + " " );
 
             vertex = DisablePolygonVertex(polygon1, vertex);   
             //  Debug.Log("vertex count" + vertex.Count);
             insidevertex = FindunwalkableNodes(polygon1, insidevertex, obstacleid, bounds);
-              Debug.Log("Inside Vertex count" + insidevertex.Count);
+              Debug.Log("List count" + insidevertex.Count);
+
+           
             for(int i=0; i<insidevertex.Count; i++)
             {
-                unwalkableNodes.Add(insidevertex[i]);
+                unwalkableNodesSet.Add(insidevertex[i]);
                // Debug.Log("Inside Vertex added" + insidevertex[i]);
                 
             }
-
+            Debug.Log("hashset count" + unwalkableNodesSet.Count);
         
 
-        return unwalkableNodes;
+        return unwalkableNodesSet;
 
     }
 
@@ -104,17 +107,16 @@ public class Grids : MonoBehaviour
             if (minZ > polygon1[i].z)
                 minZ = polygon1[i].z;
             if (maxX < polygon1[i].x)
-                {
+            {
                 maxX = polygon1[i].x;
-                Debug.Log("maxX" + maxX);
-                }
+               
+            }
             if (maxZ < polygon1[i].z)
             {
                 maxZ = polygon1[i].z;   
-                Debug.Log("maxZ" + maxZ);
-            }
+           
+            }        
         }
-
         bounds.Add(minX);
         bounds.Add(maxX);
         bounds.Add(minZ);
@@ -136,8 +138,8 @@ public class Grids : MonoBehaviour
         {
          vertex.Add(polygon1[i]);
          Vector3 objectPOS1 = polygon1[i];
-         var obstacleprefab = Instantiate(cornerPrefab, objectPOS1, Quaternion.identity);
-         obstacleprefab.GetComponent<Renderer>().material.color = Color.blue;
+          Instantiate(cornerPrefab, objectPOS1, Quaternion.identity);
+        //  obstacleprefab.GetComponent<Renderer>().material.color = Color.blue;
       
         }
      
@@ -146,9 +148,7 @@ public class Grids : MonoBehaviour
 
     public List<Vector3> FindunwalkableNodes(List<Vector3> polygon1, List<Vector3> insidevertex, int obstacleid, List<float> bounds)
     {
-        
         Debug.Log("Calling find unwalkable");
-        Debug.Log("bounds" + bounds[0] +" "+ bounds[1] +" " +bounds[2] +" "+ bounds[3] +" "+  "obstcaleid" + obstacleid);
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -171,7 +171,13 @@ public class Grids : MonoBehaviour
                         //flag++;
                         insidevertex.Add(worldPoint);
                         insidevertex.Add(bottomNode);
-                       
+                         Vector3 objectPOS0 = worldPoint;
+                        var testPrefab1=Instantiate(testPrefab, objectPOS0, Quaternion.identity);
+                        testPrefab1.GetComponent<Renderer>().material.color = Color.blue;
+                         Vector3 objectPOS1 = bottomNode;
+                        var testPrefab2=Instantiate(testPrefab, objectPOS1, Quaternion.identity);
+                        testPrefab2.GetComponent<Renderer>().material.color = Color.blue;
+
                     }
 
                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeleft))
@@ -179,6 +185,13 @@ public class Grids : MonoBehaviour
                         
                         insidevertex.Add(leftNode);
                         insidevertex.Add(bottomLeftNode);
+                         Vector3 objectPOS2 = leftNode;
+                        var testPrefab3=Instantiate(testPrefab, objectPOS2, Quaternion.identity);
+                        testPrefab3.GetComponent<Renderer>().material.color = Color.blue;
+
+                         Vector3 objectPOS3 = bottomLeftNode;
+                        var testPrefab4=Instantiate(testPrefab, objectPOS3, Quaternion.identity);
+                        testPrefab4.GetComponent<Renderer>().material.color = Color.blue;
                         // Debug.Log("worldposition added" + leftNode);
                         // Debug.Log("worldposition added" + bottomLeftNode);
                     }
@@ -195,7 +208,7 @@ public class Grids : MonoBehaviour
                 }
             }
         }
-            // Debug.Log("flag" + flag + "obstacle number" + obstacleid);
+             Debug.Log("inside function insidevertex " + insidevertex.Count);
         return insidevertex;
     }
 
@@ -216,6 +229,7 @@ public class Grids : MonoBehaviour
         bottomLeftNode = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius - nodeDiameter);
         leftNode = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius - nodeDiameter) + Vector3.forward * (y * nodeDiameter + nodeRadius);
     }
+    
 
     static bool onSegment(Vector3 p, Vector3 q, Vector3 r)
     {
