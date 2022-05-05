@@ -11,11 +11,6 @@ public class Grids : MonoBehaviour
     public Vector2 gridWorldSize;
     int obstacleGridX, obstacleGridY;
     public int gridSizeX, gridSizeY;
-   
-    public List<Vector3> vertexmidpoints = new List<Vector3>();
-    public List<Vector3> vertexmidpoints1 = new List<Vector3>();
-
-    
     public float nodeRadius = 50;
     public float nodeDiameter;
     public Node[,] grid;
@@ -145,10 +140,10 @@ public class Grids : MonoBehaviour
                         insidevertex.Add(bottomNode);
                          Vector3 objectPOS0 = worldPoint;
                         var testPrefab1=Instantiate(testPrefab, objectPOS0, Quaternion.identity);
-                        testPrefab1.GetComponent<Renderer>().material.color = Color.blue;
+                        testPrefab1.GetComponent<Renderer>().material.color = Color.red;
                          Vector3 objectPOS1 = bottomNode;
                         var testPrefab2=Instantiate(testPrefab, objectPOS1, Quaternion.identity);
-                        testPrefab2.GetComponent<Renderer>().material.color = Color.blue;
+                        testPrefab2.GetComponent<Renderer>().material.color = Color.red;
                     }
 
                     if (checkinsidePolygon(polygon1, polygon1.Count, bottomLeftPoint, extremeleft))
@@ -157,10 +152,10 @@ public class Grids : MonoBehaviour
                         insidevertex.Add(bottomLeftNode);
                          Vector3 objectPOS2 = leftNode;
                         var testPrefab3=Instantiate(testPrefab, objectPOS2, Quaternion.identity);
-                        testPrefab3.GetComponent<Renderer>().material.color = Color.blue;
+                        testPrefab3.GetComponent<Renderer>().material.color = Color.red;
                          Vector3 objectPOS3 = bottomLeftNode;
                         var testPrefab4=Instantiate(testPrefab, objectPOS3, Quaternion.identity);
-                        testPrefab4.GetComponent<Renderer>().material.color = Color.blue;
+                        testPrefab4.GetComponent<Renderer>().material.color = Color.red;
                     }
                 }
             }
