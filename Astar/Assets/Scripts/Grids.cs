@@ -70,12 +70,12 @@ public class Grids : MonoBehaviour
             bounds = CreateBoundingRectangle(polygon1, obstacleRenderer, obstacleid);
             vertex = DisablePolygonVertex(polygon1, vertex);   
             insidevertex = FindunwalkableNodes(polygon1, insidevertex, obstacleid, bounds);
-            Debug.Log("List count" + insidevertex.Count);
+            // Debug.Log("List count" + insidevertex.Count);
             for(int i=0; i<insidevertex.Count; i++)
             {
                 unwalkableNodesSet.Add(insidevertex[i]);              
             }
-            Debug.Log("hashset count" + unwalkableNodesSet.Count);
+            // Debug.Log("hashset count" + unwalkableNodesSet.Count);
         return unwalkableNodesSet;
 
     }
@@ -124,7 +124,7 @@ public class Grids : MonoBehaviour
 
     public List<Vector3> FindunwalkableNodes(List<Vector3> polygon1, List<Vector3> insidevertex, int obstacleid, List<float> bounds)
     {
-        Debug.Log("Calling find unwalkable");
+        // Debug.Log("Calling find unwalkable");
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -160,7 +160,7 @@ public class Grids : MonoBehaviour
                 }
             }
         }
-             Debug.Log("inside function insidevertex " + insidevertex.Count);
+            //  Debug.Log("inside function insidevertex " + insidevertex.Count);
         return insidevertex;
     }
 
@@ -286,6 +286,45 @@ public class Grids : MonoBehaviour
             i = next;
         } while (i != 0);
         return (count % 2 == 1); 
+    }
+    //function for finalpathcollisionchecking
+    public bool checkLineinsidepolygon(List<Vector3> polygon, int n, Vector3 p, Vector3 extreme)
+    {
+        
+        if (n < 3)
+        {
+            return false;
+        }
+
+           // with sides of polygon
+        int count = 0, i = 0;
+        do
+        {
+            int next = (i + 1) % n;
+
+            // Check if the line segment from 'p' to
+            // 'extreme' intersects with the line
+            // segment from 'polygon[i]' to 'polygon[next]'
+            if (doIntersect(polygon[i],
+                            polygon[next], p, extreme))
+            {
+                // If the Vector3 'p' is collinear with line
+                // segment 'i-next', then check if it lies
+                // on segment. If it lies, return true, otherwise false
+                if (orientation(polygon[i], p, polygon[next]) == 0)
+                {
+                    return onSegment(polygon[i], p, polygon[next]);
+                }
+                count++;
+            }
+            i = next;
+        } while (i != 0);
+        if (count>0)
+        return true;
+        else
+        {
+            return false;
+        }
     }
 
     public List<Node> GetNeighbours(Node node)  

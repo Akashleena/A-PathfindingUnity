@@ -38,9 +38,9 @@ public class ExtractObstacles : MonoBehaviour
         foreach (SerializableClass sc in obstacleList)
         {
             obstacleid++;
-            Debug.Log("hello");
+            //Debug.Log("hello");
             unwalkableNodesSet = g.CreateGrid(sc.polygon1, obstacleid);
-            Debug.Log("OBSTACLE NUMBER = " + obstacleid);
+           // Debug.Log("OBSTACLE NUMBER = " + obstacleid);
             // for (int i=0; i<unwalkableNodes.Count; i++)
             // {
             //    // Debug.Log("unwalkable nodes = " + unwalkableNodes[i]);
