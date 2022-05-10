@@ -94,7 +94,7 @@ public class Pathfinding : MonoBehaviour
                
         Debug.Log("Total non walkable nodes = " + k);  
 
-        int l=0;
+          int l=0;
           for (int i = 0; i < myGrid.gridSizeX; i++)
         {
             for (int j = 0; j < myGrid.gridSizeY; j++)
@@ -123,17 +123,20 @@ public class Pathfinding : MonoBehaviour
         {
             points[i] = myGrid.worldBottomLeft + Vector3.right * (n.gridX * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (n.gridY * myGrid.nodeDiameter + myGrid.nodeRadius);
             waypoints.Add(points[i]);
-            pathLineRenderer.SetPosition(i, points[i]);
+          // pathLineRenderer.SetPosition(i, points[i]);
             i++;
         }
 
-        //reducedwaypoints = rw.DouglasPeuckerReduction(waypoints, epsilon);
-        // rdppathLineRenderer.positionCount = reducedwaypoints.Count;
-        //  for (int j = 0; j < reducedwaypoints.Count; j++)
-        // {
-        //     rdppathLineRenderer.SetPosition(j, reducedwaypoints[j]);
-        // }
-       CheckLineCollision(waypoints);
+
+        reducedwaypoints = rw.DouglasPeuckerReduction(waypoints, epsilon);
+        pathLineRenderer.positionCount = reducedwaypoints.Count;
+         for (int j = 0; j < reducedwaypoints.Count; j++)
+        {
+            pathLineRenderer.SetPosition(j, reducedwaypoints[j]);
+        }
+        Vector3 endWaypoint = reducedwaypoints[(reducedwaypoints.Count-1)];
+       RdpHeuristic(reducedwaypoints, waypoints, endWaypoint);
+
        
         
        
@@ -228,32 +231,42 @@ public class Pathfinding : MonoBehaviour
             return 14 * dstY + 10 * (dstX - dstY);
         return 14 * dstX + 10 * (dstY - dstX);
     }
-
-     public void CheckLineCollision(List<Vector3> astarWaypoints) 
-    {
-        int i=0;
-       while (i<astarWaypoints.Count-1)
-        {
-            int obstacleno=0;   
-              int c=0;  
-            gcsWaypoints.Add(astarWaypoints[i]);
-            while(c==0 && i<astarWaypoints.Count-1)
-            {
-                foreach (var sc in eo.obstacleList)
-                {
-               
-                    bool f1 = g1.checkLineinsidepolygon(sc.polygon1, sc.polygon1.Count, astarWaypoints[i], astarWaypoints[i+1]); 
-                    if(f1==true)
-                    c+=1;
-               
-                }
-                i=i+1;
-
-            }
    
+
+
+     public void RdpHeuristic(List<Vector3> rdpWaypoints, List<Vector3> astarWaypoints, Vector3 endWaypoint) 
+    {
+        Debug.Log("END WAYPOINT" + endWaypoint);
+       int startIndex = 0, endIndex=2, copyofendIndex=0;
+       gcsWaypoints.Add(rdpWaypoints[startIndex]);
+       while (endIndex<=(rdpWaypoints.Count-1))
+        {
+            Debug.Log("rdpWaypoints[endIndex]" + rdpWaypoints[endIndex]);
+             int nooftimeslineIntersects=0;
+            foreach (var sc in eo.obstacleList)
+            {
+                bool lineIntersects= g1.checkLineinsidepolygon(sc.polygon1, sc.polygon1.Count, rdpWaypoints[startIndex], rdpWaypoints[endIndex]);
+                if (lineIntersects)
+                {
+                    nooftimeslineIntersects= nooftimeslineIntersects+1;
+                }
+            }
+            Debug.Log("no of time line intersects"+ nooftimeslineIntersects+ " for start and end as "+ rdpWaypoints[startIndex] + rdpWaypoints[endIndex]);
+            copyofendIndex= endIndex;
+            if (nooftimeslineIntersects==0)
+            {
+                gcsWaypoints.Add(rdpWaypoints[endIndex]);
+            
+                
+            }
+            else
+            {
+                startIndex=copyofendIndex;   
+                Debug.Log("new start node" + rdpWaypoints[startIndex]); 
+            }
+            endIndex= endIndex+1;
         }
 
-            // Debug.Log(String.Join(",", gcsWaypoints));
             gcsList = gcsWaypoints.ToList();
             Debug.Log(gcsList.Count);
             // gcsList.Add(gcsWaypoints[i]);
@@ -262,7 +275,5 @@ public class Pathfinding : MonoBehaviour
         {
             finalpathLineRenderer.SetPosition(j, gcsList[j]);
         }
-
-
     }
 }
