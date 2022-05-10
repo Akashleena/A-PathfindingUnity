@@ -123,16 +123,16 @@ public class Pathfinding : MonoBehaviour
         {
             points[i] = myGrid.worldBottomLeft + Vector3.right * (n.gridX * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (n.gridY * myGrid.nodeDiameter + myGrid.nodeRadius);
             waypoints.Add(points[i]);
-            pathLineRenderer.SetPosition(i, points[i]);
+           // pathLineRenderer.SetPosition(i, points[i]);
             i++;
         }
 
         reducedwaypoints = rw.DouglasPeuckerReduction(waypoints, epsilon);
-        // rdppathLineRenderer.positionCount = reducedwaypoints.Count;
-        //  for (int j = 0; j < reducedwaypoints.Count; j++)
-        // {
-        //     rdppathLineRenderer.SetPosition(j, reducedwaypoints[j]);
-        // }
+        pathLineRenderer.positionCount = reducedwaypoints.Count;
+         for (int j = 0; j < reducedwaypoints.Count; j++)
+        {
+            pathLineRenderer.SetPosition(j, reducedwaypoints[j]);
+        }
         Vector3 endWaypoint = reducedwaypoints[(reducedwaypoints.Count-1)];
        RdpHeuristic(reducedwaypoints, waypoints, endWaypoint);
        
