@@ -123,17 +123,17 @@ public class Pathfinding : MonoBehaviour
         {
             points[i] = myGrid.worldBottomLeft + Vector3.right * (n.gridX * myGrid.nodeDiameter + myGrid.nodeRadius) + Vector3.forward * (n.gridY * myGrid.nodeDiameter + myGrid.nodeRadius);
             waypoints.Add(points[i]);
-          // pathLineRenderer.SetPosition(i, points[i]);
+          pathLineRenderer.SetPosition(i, points[i]);
             i++;
         }
 
 
         reducedwaypoints = rw.DouglasPeuckerReduction(waypoints, epsilon);
-        pathLineRenderer.positionCount = reducedwaypoints.Count;
-         for (int j = 0; j < reducedwaypoints.Count; j++)
-        {
-            pathLineRenderer.SetPosition(j, reducedwaypoints[j]);
-        }
+        // pathLineRenderer.positionCount = reducedwaypoints.Count;
+        //  for (int j = 0; j < reducedwaypoints.Count; j++)
+        // {
+        //     pathLineRenderer.SetPosition(j, reducedwaypoints[j]);
+        // }
         Vector3 endWaypoint = reducedwaypoints[(reducedwaypoints.Count-1)];
        RdpHeuristic(reducedwaypoints, waypoints, endWaypoint);
 
@@ -238,35 +238,36 @@ public class Pathfinding : MonoBehaviour
     {
         Debug.Log("END WAYPOINT" + endWaypoint);
        int startIndex = 0, endIndex=2, copyofendIndex=0;
-       gcsWaypoints.Add(rdpWaypoints[startIndex]);
-       while (endIndex<=(rdpWaypoints.Count-1))
+       gcsWaypoints.Add(astarWaypoints[startIndex]);
+       while (endIndex<=(astarWaypoints.Count-1))
         {
-            Debug.Log("rdpWaypoints[endIndex]" + rdpWaypoints[endIndex]);
+            Debug.Log("astarWaypoints[endIndex]" + astarWaypoints[endIndex]);
              int nooftimeslineIntersects=0;
             foreach (var sc in eo.obstacleList)
             {
-                bool lineIntersects= g1.checkLineinsidepolygon(sc.polygon1, sc.polygon1.Count, rdpWaypoints[startIndex], rdpWaypoints[endIndex]);
+                bool lineIntersects= g1.checkLineinsidepolygon(sc.polygon1, sc.polygon1.Count, astarWaypoints[startIndex], astarWaypoints[endIndex]);
                 if (lineIntersects)
                 {
                     nooftimeslineIntersects= nooftimeslineIntersects+1;
                 }
             }
-            Debug.Log("no of time line intersects"+ nooftimeslineIntersects+ " for start and end as "+ rdpWaypoints[startIndex] + rdpWaypoints[endIndex]);
-            copyofendIndex= endIndex;
+            Debug.Log("no of time line intersects"+ nooftimeslineIntersects+ " for start and end as "+ astarWaypoints[startIndex] + astarWaypoints[endIndex]);
+           
             if (nooftimeslineIntersects==0)
             {
-                gcsWaypoints.Add(rdpWaypoints[endIndex]);
+                 copyofendIndex= endIndex;
             
                 
             }
             else
             {
+                gcsWaypoints.Add(astarWaypoints[copyofendIndex]);
                 startIndex=copyofendIndex;   
-                Debug.Log("new start node" + rdpWaypoints[startIndex]); 
+                Debug.Log("new start node" + astarWaypoints[startIndex]); 
             }
             endIndex= endIndex+1;
         }
-
+            gcsWaypoints.Add(astarWaypoints[(astarWaypoints.Count-1)]);
             gcsList = gcsWaypoints.ToList();
             Debug.Log(gcsList.Count);
             // gcsList.Add(gcsWaypoints[i]);
