@@ -237,7 +237,7 @@ public class Pathfinding : MonoBehaviour
      public void RdpHeuristic(List<Vector3> rdpWaypoints, List<Vector3> astarWaypoints, Vector3 endWaypoint) 
     {
         Debug.Log("END WAYPOINT" + endWaypoint);
-       int startIndex = 0, endIndex=2, copyofendIndex=0;
+       int startIndex = 0, endIndex=2, copyofendIndex=2;
        gcsWaypoints.Add(astarWaypoints[startIndex]);
        while (endIndex<=(astarWaypoints.Count-1))
         {
