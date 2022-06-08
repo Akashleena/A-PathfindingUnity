@@ -22,7 +22,7 @@ public class GameDataManager : MonoBehaviour
     public GameData gameData;
     public ExtractObstacles extractObs;
 
-    public List<Vector3> wayPoints;
+    //public List<Vector3> wayPoints;
 
     void Awake()
     {
@@ -56,7 +56,7 @@ public class GameDataManager : MonoBehaviour
         Debug.Log("File Read");
     }
 
-    public void writeFile()
+    public void writeFile(List<Vector3> wayPoints)
     {
         //To Create a Sample InputData File
        // inputGameData.startPos = gameData.startPos;

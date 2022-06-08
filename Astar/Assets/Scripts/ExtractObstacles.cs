@@ -63,7 +63,6 @@ public class ExtractObstacles : MonoBehaviour
            
             foreach(Vector3 obsSet in unwalkableNodesSet)
             {
-                Debug.Log("obset"+ obsSet);
                 finalobstacleList.Add(obsSet);
                
             }
@@ -72,9 +71,8 @@ public class ExtractObstacles : MonoBehaviour
       
     }
     void Update()
-    {
-        Debug.Log ("update start" + ExtractObstacles.InputVariables.start);
-       Debug.Log ("update end" + ExtractObstacles.InputVariables.end);
+    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+        
             if (Input.GetKeyDown(KeyCode.C))
             {
                 // pf.FindPath(seeker.position, target.position,finalobstacleList);

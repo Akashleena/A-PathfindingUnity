@@ -15,7 +15,7 @@ public class Pathfinding : MonoBehaviour
     public float epsilon = 150f; //for RDP tolerance
     public float epsilonMax, epsilonMin, epsilonCurrent;
     public Grids myGrid;
-    GameData gamedata;
+    public GameDataManager gdm;
     public Grids g1;
     Reducewaypoints rw = new Reducewaypoints();
     int noofwaypoints;
@@ -38,7 +38,7 @@ public class Pathfinding : MonoBehaviour
           eo= GetComponent<ExtractObstacles>();
           gcsWaypoints = new HashSet<Vector3>();
           gcsList = new List<Vector3>();
-          gamedata = gameObject.GetComponent<GameData>();
+          
     }
     public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY)
     {
@@ -279,6 +279,8 @@ public class Pathfinding : MonoBehaviour
             gcsWaypoints.Add(astarWaypoints[(astarWaypoints.Count-1)]);
             gcsList = gcsWaypoints.ToList();
             Debug.Log(gcsList.Count);
+            gdm.writeFile(gcsList);
+
             // gcsList.Add(gcsWaypoints[i]);
          finalpathLineRenderer.positionCount = gcsList.Count;
          for (int j = 0; j < gcsList.Count; j++)
