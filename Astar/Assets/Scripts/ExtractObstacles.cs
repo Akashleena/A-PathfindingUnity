@@ -7,10 +7,17 @@ using Debug = UnityEngine.Debug;
 public class ExtractObstacles : MonoBehaviour
 {
     //public List<Vector3> unwalkableNodes = new List<Vector3>();
-     public HashSet<Vector3> unwalkableNodesSet = new HashSet<Vector3>();
+    public HashSet<Vector3> unwalkableNodesSet = new HashSet<Vector3>();
     public List<Vector3> finalobstacleList ;
     Grids g ;
-    public Transform seeker, target;
+
+    public static class InputVariables{
+          public static Vector3 start{get;set;}
+          public static Vector3 end{get;set;}
+    }
+  
+    
+   // public Transform seeker, target;
     Pathfinding pf ;
     [Serializable]
     public class SerializableClass
@@ -24,53 +31,67 @@ public class ExtractObstacles : MonoBehaviour
     {
         g = gameObject.GetComponent<Grids>();
         pf = gameObject.GetComponent<Pathfinding>();
+        
        
         finalobstacleList = new List<Vector3>();
         
     }
     void Start()
     {
+      
         ExtractallObstacles();
+
+    }
+    public void TakeInput(Vector3 startPos, Vector3 endPos)
+    {
+       ExtractObstacles.InputVariables.start = startPos;
+       ExtractObstacles.InputVariables.end = endPos;
+
+       Debug.Log ("start" + ExtractObstacles.InputVariables.start);
+       Debug.Log ("end" + ExtractObstacles.InputVariables.end);
+      
+
     }
     public void ExtractallObstacles()   
     {
+        
         Debug.Log("Inside extract all obstacles");
         foreach (SerializableClass sc in obstacleList)
         {
             obstacleid++;
-            //Debug.Log("hello");
             unwalkableNodesSet = g.CreateGrid(sc.polygon1, obstacleid);
-           // Debug.Log("OBSTACLE NUMBER = " + obstacleid);
-            // for (int i=0; i<unwalkableNodes.Count; i++)
-            // {
-            //    // Debug.Log("unwalkable nodes = " + unwalkableNodes[i]);
-            //     finalobstacleList.Add(unwalkableNodes[i]);
-
-            // }
+           
             foreach(Vector3 obsSet in unwalkableNodesSet)
             {
+                Debug.Log("obset"+ obsSet);
                 finalobstacleList.Add(obsSet);
+               
             }
         }
-        
+   
       
     }
-
     void Update()
     {
-  
+        Debug.Log ("update start" + ExtractObstacles.InputVariables.start);
+       Debug.Log ("update end" + ExtractObstacles.InputVariables.end);
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                // pf.FindPath(seeker.position, target.position,finalobstacleList);
+                Debug.Log ("start" +  ExtractObstacles.InputVariables.start);
+                Debug.Log ("end" + ExtractObstacles.InputVariables.end);
+                pf.FindPath(ExtractObstacles.InputVariables.start,ExtractObstacles.InputVariables.end,finalobstacleList);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            pf.FindPath(seeker.position, target.position,finalobstacleList);
-        }
-         if (Input.GetKeyDown(KeyCode.D))
-        {
-
-            pf.pathLineRenderer.positionCount = 0;
-            pf.finalpathLineRenderer.positionCount = 0;
-        }
+                pf.pathLineRenderer.positionCount = 0;
+                pf.finalpathLineRenderer.positionCount = 0;
+            }
+       
     }
+
+  
 
 }
 

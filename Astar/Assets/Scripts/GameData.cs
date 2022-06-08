@@ -33,4 +33,12 @@ public class GameData : MonoBehaviour
     {
         outputData.wayPoints = this.wayPoints = points;
     }
+    public Vector3 returnstartPos()
+    {
+        return this.startPos;
+    }
+       public Vector3 returnendPos()
+    {
+        return this.endPos;
+    }
 }

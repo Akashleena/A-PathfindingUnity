@@ -20,6 +20,7 @@ public class GameDataManager : MonoBehaviour
     public OutputData outputGameData;
 
     public GameData gameData;
+    public ExtractObstacles extractObs;
 
     public List<Vector3> wayPoints;
 
@@ -48,8 +49,8 @@ public class GameDataManager : MonoBehaviour
             // Deserialize the JSON data 
             //  into a pattern matching the GameData class.
             inputGameData = JsonUtility.FromJson<InputData>(fileContents);
-
-           gameData.LoadInputData(inputGameData);
+            extractObs.TakeInput(inputGameData.startPos, inputGameData.endPos);
+            gameData.LoadInputData(inputGameData);
         }
 
         Debug.Log("File Read");

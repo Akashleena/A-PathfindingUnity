@@ -8,12 +8,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+//@Author: Akashleena Sarkar <akashleena.s@newspace.co.in>
 public class Pathfinding : MonoBehaviour
 {
-    public Transform seeker, target;
+   // public Transform seeker, target;
     public float epsilon = 150f; //for RDP tolerance
     public float epsilonMax, epsilonMin, epsilonCurrent;
     public Grids myGrid;
+    GameData gamedata;
     public Grids g1;
     Reducewaypoints rw = new Reducewaypoints();
     int noofwaypoints;
@@ -26,6 +28,7 @@ public class Pathfinding : MonoBehaviour
     public List<Vector3> gcsList;
     public Vector3[] points;
     ExtractObstacles eo;
+    public Vector3 start, end;
     public Transform testPrefab;
     public Node[,] newNode;
     void Start()
@@ -35,6 +38,7 @@ public class Pathfinding : MonoBehaviour
           eo= GetComponent<ExtractObstacles>();
           gcsWaypoints = new HashSet<Vector3>();
           gcsList = new List<Vector3>();
+          gamedata = gameObject.GetComponent<GameData>();
     }
     public Grids SetNodewalkability(List<Vector3> finalobstacleList, int gridSizeX, int gridSizeY)
     {
@@ -117,7 +121,8 @@ public class Pathfinding : MonoBehaviour
         points = new Vector3[path.Count];
         waypoints = new List<Vector3>();
 
-        points[path.Count - 1] = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
+        // points[path.Count - 1] = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
+        points[path.Count - 1] = new Vector3(end.x, end.y, end.z);
         pathLineRenderer.positionCount = noofwaypoints;
         foreach (Node n in path)
         {
@@ -144,7 +149,11 @@ public class Pathfinding : MonoBehaviour
 
     public void FindPath(Vector3 startPos, Vector3 targetPos, List<Vector3> finalobstacleList)
     {
+        Debug.Log("startPos" + startPos);
+        Debug.Log("targetPos" + targetPos);
         int noofwalkable =0;
+        start = startPos;
+        end = targetPos;
         myGrid= SetNodewalkability(finalobstacleList, myGrid.gridSizeX, myGrid.gridSizeY);
         Node startNode = myGrid.NodeFromWorldPoint(startPos);
         Node targetNode = myGrid.NodeFromWorldPoint(targetPos);

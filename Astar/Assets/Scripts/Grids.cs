@@ -58,6 +58,7 @@ public class Grids : MonoBehaviour
     }
       public HashSet<Vector3> CreateGrid(List<Vector3> polygon1, int obstacleid)
     {   
+        Debug.Log("inside create grid");
         unwalkableNodesSet = new HashSet<Vector3>();
         grid = new Node[gridSizeX, gridSizeY];
         insidevertex = new List<Vector3>();
