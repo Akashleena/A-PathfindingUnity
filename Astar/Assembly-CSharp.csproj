@@ -42,6 +42,8 @@
      <Compile Include="Assets/Scripts/Pathfinding.cs" />
      <Compile Include="Assets/Scripts/Node.cs" />
      <Compile Include="Assets/Scripts/Reducewaypoints.cs" />
+     <Compile Include="Assets/Scripts/GameData.cs" />
+     <Compile Include="Assets/Scripts/GameDataManager.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/2020.3.30f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
