@@ -279,7 +279,7 @@ public class Pathfinding : MonoBehaviour
             gcsWaypoints.Add(astarWaypoints[(astarWaypoints.Count-1)]);
             gcsList = gcsWaypoints.ToList();
             Debug.Log(gcsList.Count);
-            gdm.writeFile(gcsList);
+           
 
             // gcsList.Add(gcsWaypoints[i]);
          finalpathLineRenderer.positionCount = gcsList.Count;
@@ -287,5 +287,6 @@ public class Pathfinding : MonoBehaviour
         {
             finalpathLineRenderer.SetPosition(j, gcsList[j]);
         }
+         gdm.writeFile(gcsList);
     }
 }

@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using Debug = UnityEngine.Debug;
+using System.IO;
+//using System.Text.Json;
 
 //Author : Akashleena Sarkar (akashleena.s@newspace.co.in)
 public class ExtractObstacles : MonoBehaviour
@@ -10,12 +12,15 @@ public class ExtractObstacles : MonoBehaviour
     public HashSet<Vector3> unwalkableNodesSet = new HashSet<Vector3>();
     public List<Vector3> finalobstacleList ;
     Grids g ;
-
+    string obstacleDataFilePath;
+    public GameData gameData;
     public static class InputVariables{
           public static Vector3 start{get;set;}
           public static Vector3 end{get;set;}
     }
-  
+    
+    [SerializeField]
+    public OutputData obstacleGameData;
     
    // public Transform seeker, target;
     Pathfinding pf ;
@@ -32,7 +37,7 @@ public class ExtractObstacles : MonoBehaviour
         g = gameObject.GetComponent<Grids>();
         pf = gameObject.GetComponent<Pathfinding>();
         
-       
+        //obstacleDataFilePath = Application.dataPath + "/obstacleData.json";
         finalobstacleList = new List<Vector3>();
         
     }
@@ -70,6 +75,28 @@ public class ExtractObstacles : MonoBehaviour
    
       
     }
+
+    // public void writeobstacleFile(List<SerializableClass> obstacleList)
+    // {
+    //     //To Create a Sample InputData File
+    //    // inputGameData.startPos = gameData.startPos;
+    //     //inputGameData.endPos = gameData.endPos;
+    //     //string jsonString = JsonUtility.ToJson(inputGameData);
+    //     //File.WriteAllText(inputDataFilePath, jsonString);
+
+    //     gameData.LoadOutputData(obstacleGameData, List<SerializableClass>obstacleList);
+
+    //     // string jsonString = JsonUtility.ToJson(obstacleGameData);
+    //     string jsonString = JsonSerializer.Serialize(obstacleGameData);
+
+    //     // Write JSON to file.
+    //     File.WriteAllText(obstacleDataFilePath, jsonString);
+
+    //     Debug.Log("File Saved");
+    // }
+
+
+
     void Update()
     {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
         
