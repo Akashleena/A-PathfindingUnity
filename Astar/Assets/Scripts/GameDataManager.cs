@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+//Author : Akashleena Sarkar (akashleena.s@newspace.co.in)
+
 public class GameDataManager : MonoBehaviour
 {
     //File Path for the InputData

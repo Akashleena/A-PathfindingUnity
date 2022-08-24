@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+//Author : Akashleena Sarkar (akashleena.s@newspace.co.in)S
+
 public class Node
 {
     public bool walkable;

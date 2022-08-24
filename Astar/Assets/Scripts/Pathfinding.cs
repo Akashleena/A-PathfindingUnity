@@ -72,7 +72,7 @@ public class Pathfinding : MonoBehaviour
                     {
                         //myGrid.grid[x, y] = new Node(false, worldPoint, x, y);
                         myGrid.grid[x, y].walkable = false;
-                    // finalGrid=mygrid;
+                        // finalGrid=mygrid;
                         // Vector3 objectPOS5 = worldPoint;
                         // var obstacleprefab = Instantiate(testPrefab, objectPOS5, Quaternion.identity);
                         // obstacleprefab.GetComponent<Renderer>().material.color = Color.red;

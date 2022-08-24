@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System;
 using Debug = UnityEngine.Debug;
 using System.IO;
-//using System.Text.Json;
+
 
 //Author : Akashleena Sarkar (akashleena.s@newspace.co.in)
+
 public class ExtractObstacles : MonoBehaviour
 {
     //public List<Vector3> unwalkableNodes = new List<Vector3>();
